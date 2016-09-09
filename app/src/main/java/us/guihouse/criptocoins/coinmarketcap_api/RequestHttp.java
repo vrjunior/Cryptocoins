@@ -13,35 +13,31 @@ import java.net.URL;
  */
 public class RequestHttp {
 
-    public class RequestFail extends Exception {
-
-    }
+    public class RequestFail extends Exception {}
     private final URL requestUrl;
-    public RequestHttp(String url) throws MalformedURLException {
 
+    public RequestHttp(String url) throws MalformedURLException {
         this.requestUrl = new URL(url);
     }
 
-    public String getTicker(int limit) throws RequestFail {
+    public String getTicker() throws RequestFail {
+        HttpURLConnection urlConnection = null;
+        BufferedReader in = null;
         try {
-            HttpURLConnection urlConnection = (HttpURLConnection) this.requestUrl.openConnection();
+            urlConnection = (HttpURLConnection) this.requestUrl.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.addRequestProperty("Accept", "application/json");
 
-            String parameters = new StringBuilder("limit=").append(limit).toString();
-
-            DataOutputStream wr = new DataOutputStream(urlConnection.getOutputStream());
-            wr.writeBytes(parameters);
-            wr.flush();
-            wr.close();
-
             int responseCode = urlConnection.getResponseCode();
             System.out.println("\nSending 'POST' request to URL : " + requestUrl.toString());
-            System.out.println("Post parameters : " + parameters);
             System.out.println("Response Code : " + responseCode);
 
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(urlConnection.getInputStream()));
+            try {
+                in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+            }finally {
+                if(in != null)
+                    in.close();
+            }
 
             String inputLine;
             StringBuffer response = new StringBuffer();
@@ -49,13 +45,15 @@ public class RequestHttp {
             while ((inputLine = in.readLine()) != null) {
                 response.append(inputLine);
             }
-            in.close();
+
+            return response.toString();
 
         } catch (IOException e) {
             throw new RequestFail();
         }
-
-        return null;
+        finally {
+            if(urlConnection != null)
+                urlConnection.disconnect();
+        }
     }
-
 }
