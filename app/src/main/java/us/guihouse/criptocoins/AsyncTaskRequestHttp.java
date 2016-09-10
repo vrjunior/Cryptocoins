@@ -1,19 +1,28 @@
 package us.guihouse.criptocoins;
 
 import android.os.AsyncTask;
+import android.view.View;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 
+import us.guihouse.criptocoins.coinmarketcap_api.CryptoCoinParser;
 import us.guihouse.criptocoins.coinmarketcap_api.RequestHttp;
 
 /**
  * Created by valmir.massoni on 09/09/2016.
  */
-public class AsyncTaskRequestHttp extends AsyncTask<Void, String, String> {
+public class AsyncTaskRequestHttp extends AsyncTask<Void, ArrayList<CryptoCoin>, ArrayList<CryptoCoin>> {
     private String url;
+    private AsyncTaskResult instance;
 
-    public AsyncTaskRequestHttp(String url) {
+    public AsyncTaskRequestHttp(AsyncTaskResult instance, String url) {
         this.url = url;
+        this.instance = instance;
     }
 
     @Override
@@ -22,23 +31,32 @@ public class AsyncTaskRequestHttp extends AsyncTask<Void, String, String> {
     }
 
     @Override
-    protected String doInBackground(Void... voids) {
-        String result = null;
+    protected ArrayList<CryptoCoin> doInBackground(Void... voids) {
+        ArrayList<CryptoCoin> result = null;
         try {
             RequestHttp requestHttp = new RequestHttp(this.url);
+            String rawData = requestHttp.getTicker();
+            CryptoCoinParser parser = new CryptoCoinParser(rawData);
+            result = parser.getCryptoCoinArrayList();
 
-            result = requestHttp.getTicker();
         } catch (MalformedURLException e) {
             e.printStackTrace(); //URL initialize exception
+
         } catch (RequestHttp.RequestFail requestFail) {
-            //TODO: Informar erro e exibir botão para tentar novamente!
+            //TODO: Informar erro e dar a opção de mudar de servidor.
             requestFail.printStackTrace();
+
+        } catch (JSONException e) {
+            e.printStackTrace(); //Error to create JSONArray or json hash does not exist
+            //TODO: Informar erro e exibir botão para tentar novamente.
         }
+
         return  result;
     }
 
     @Override
-    protected void onPostExecute(String result) {
+    protected void onPostExecute(ArrayList<CryptoCoin> result) {
         super.onPostExecute(result);
+        instance.onAsyncTaskResult(result);
     }
 }

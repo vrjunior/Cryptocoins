@@ -9,8 +9,16 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="us.guihouse.criptocoins.MainActivity">
 
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvJsonTest" />
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/btnCallAPI"/>
+        android:id="@+id/btnCallAPI"
+        android:text="Teste"
+        android:layout_below="@id/tvJsonTest"/>
 </RelativeLayout>
