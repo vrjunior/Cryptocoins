@@ -4,7 +4,7 @@ package us.guihouse.criptocoins;
  * Created by valmir on 10/09/16.
  */
 public class CryptoCoin {
-    private int id;
+    private String id;
     private String name;
     private String symbol;
     private int rankPosition;
@@ -19,7 +19,7 @@ public class CryptoCoin {
     private double percentChange7d;
     private long last_updated; //DateTime?
 
-    public CryptoCoin(int id, String name, String symbol, int rankPosition, double priceUsd, double priceBtc,
+    public CryptoCoin(String id, String name, String symbol, int rankPosition, double priceUsd, double priceBtc,
                         double volumeUsdLast24h, double marketCapUsd, double availableSupply, double totalSupply,
                         double percentChange1h, double percentChange24h, double percentChange7d, long last_updated) {
 
@@ -39,7 +39,7 @@ public class CryptoCoin {
         this.last_updated = last_updated;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 

@@ -1,11 +1,8 @@
 package us.guihouse.criptocoins;
 
 import android.os.AsyncTask;
-import android.view.View;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;

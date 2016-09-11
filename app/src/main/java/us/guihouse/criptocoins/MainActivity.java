@@ -3,38 +3,35 @@ package us.guihouse.criptocoins;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements AsyncTaskResult{
 
     private static final String URLREQUEST = "https://api.coinmarketcap.com/v1/ticker?limit=10";
-    private Button btnTest;
-    private TextView tvTest;
     private AsyncTaskRequestHttp asynTask;
+    private ListView lvCryptocoins;
+    private CryptocoinAdapter adapter;
+    private List<CryptoCoin> cryptoCoins;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btnTest = (Button) findViewById(R.id.btnCallAPI);
-        tvTest = (TextView) findViewById(R.id.tvJsonTest);
+        lvCryptocoins = (ListView) findViewById(R.id.lvCryptocoins);
 
-        btnTest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                asynTask = new AsyncTaskRequestHttp(MainActivity.this, URLREQUEST);
-                asynTask.execute();
-            }
-        });
+        asynTask = new AsyncTaskRequestHttp(MainActivity.this, URLREQUEST);
+        asynTask.execute();
     }
 
 
     @Override
     public void onAsyncTaskResult(ArrayList<CryptoCoin> result) {
-       // tvTest.setText(result);
+        this.cryptoCoins = result;
+        adapter = new CryptocoinAdapter(this, R.layout.cryptocoin_row_item, cryptoCoins);
+        lvCryptocoins.setAdapter(adapter);
     }
 }

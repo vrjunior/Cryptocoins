@@ -24,7 +24,7 @@ public class CryptoCoinParser {
         JSONObject JSONObj;
         for(int i = 0; i < jsonArray.length(); i++) {
             JSONObj = jsonArray.getJSONObject(i);
-            currentCryptoCoin = new CryptoCoin( JSONObj.getInt("id"),
+            currentCryptoCoin = new CryptoCoin( JSONObj.getString("id"),
                     JSONObj.getString("name"),
                     JSONObj.getString("symbol"),
                     JSONObj.getInt("rank"),
