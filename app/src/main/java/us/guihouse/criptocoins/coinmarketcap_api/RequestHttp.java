@@ -23,6 +23,7 @@ public class RequestHttp {
     public String getTicker() throws RequestFail {
         HttpURLConnection urlConnection = null;
         BufferedReader in = null;
+        StringBuffer response = new StringBuffer();
         try {
             urlConnection = (HttpURLConnection) this.requestUrl.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -35,11 +36,10 @@ public class RequestHttp {
             try {
                 in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
                 String inputLine;
-                StringBuffer response = new StringBuffer();
                 while ((inputLine = in.readLine()) != null) {
                     response.append(inputLine);
                 }
-                return response.toString();
+                
             } finally {
                 if(in != null)
                     in.close();
@@ -51,5 +51,6 @@ public class RequestHttp {
             if(urlConnection != null)
                 urlConnection.disconnect();
         }
+        return response.toString();
     }
 }
