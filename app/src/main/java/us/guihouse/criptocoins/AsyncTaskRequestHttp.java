@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import us.guihouse.criptocoins.coinmarketcap_api.CryptoCoinParser;
 import us.guihouse.criptocoins.coinmarketcap_api.RequestHttp;
+import us.guihouse.criptocoins.models.CryptoCoin;
 
 /**
  * Created by valmir.massoni on 09/09/2016.
@@ -37,14 +38,13 @@ public class AsyncTaskRequestHttp extends AsyncTask<Void, ArrayList<CryptoCoin>,
             result = parser.getCryptoCoinArrayList();
 
         } catch (MalformedURLException e) {
-            e.printStackTrace(); //URL initialize exception
+            //URL initialize exception
 
         } catch (RequestHttp.RequestFail requestFail) {
             //TODO: Informar erro e dar a opção de mudar de servidor.
-            requestFail.printStackTrace();
 
         } catch (JSONException e) {
-            e.printStackTrace(); //Error to create JSONArray or json hash does not exist
+             //Error to create JSONArray or json hash does not exist
             //TODO: Informar erro e exibir botão para tentar novamente.
         }
 

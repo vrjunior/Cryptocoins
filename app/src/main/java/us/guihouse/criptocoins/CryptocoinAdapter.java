@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import us.guihouse.criptocoins.models.CryptoCoin;
+
 /**
  * Created by valmir on 11/09/16.
  */

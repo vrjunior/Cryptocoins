@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import us.guihouse.criptocoins.CryptoCoin;
+import us.guihouse.criptocoins.models.CryptoCoin;
 
 /**
  * Created by valmir on 10/09/16.

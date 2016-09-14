@@ -2,16 +2,19 @@ package us.guihouse.criptocoins;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements AsyncTaskResult{
+import us.guihouse.criptocoins.models.CryptoCoin;
+import us.guihouse.criptocoins.repositories.CryptocoinsSQLiteOpenHelper;
+
+public class MainActivity extends AppCompatActivity{
 
     private static final String URLREQUEST = "https://api.coinmarketcap.com/v1/ticker?limit=10";
-    private AsyncTaskRequestHttp asynTask;
+    private AsyncTaskRequestHttp asyncTaskHttp;
+    private AsyncTaskDataBase asyncTaskDataBase;
     private ListView lvCryptocoins;
     private CryptocoinAdapter adapter;
     private List<CryptoCoin> cryptoCoins;
@@ -23,15 +26,29 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskResult{
 
         lvCryptocoins = (ListView) findViewById(R.id.lvCryptocoins);
 
-        asynTask = new AsyncTaskRequestHttp(MainActivity.this, URLREQUEST);
-        asynTask.execute();
-    }
 
 
-    @Override
-    public void onAsyncTaskResult(ArrayList<CryptoCoin> result) {
-        this.cryptoCoins = result;
-        adapter = new CryptocoinAdapter(this, R.layout.cryptocoin_row_item, cryptoCoins);
-        lvCryptocoins.setAdapter(adapter);
+        /*asyncTaskDataBase = new AsyncTaskDataBase(
+                new AsyncTaskResult() {
+                    @Override
+                    public void onAsyncTaskResult(CryptocoinsSQLiteOpenHelper result) {
+
+                    }
+                }, MainActivity.this);*/ //TODO
+
+
+        asyncTaskHttp = new AsyncTaskRequestHttp(
+            new AsyncTaskResult() {
+                @Override
+                public void onAsyncTaskResult(ArrayList<CryptoCoin> result) {
+                    cryptoCoins = result;
+                    adapter = new CryptocoinAdapter(MainActivity.this, R.layout.cryptocoin_row_item, cryptoCoins);
+
+                    lvCryptocoins.setAdapter(adapter);
+                }
+            }, URLREQUEST);
+
+        asyncTaskHttp.execute();
     }
+
 }

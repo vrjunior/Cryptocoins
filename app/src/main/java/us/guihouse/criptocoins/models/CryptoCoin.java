@@ -1,4 +1,4 @@
-package us.guihouse.criptocoins;
+package us.guihouse.criptocoins.models;
 
 /**
  * Created by valmir on 10/09/16.
