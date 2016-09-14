@@ -7,17 +7,20 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
+import us.guihouse.criptocoins.coinmarketcap_api.RequestHttpAsyncTask;
+import us.guihouse.criptocoins.coinmarketcap_api.AsyncTaskHttpResult;
 import us.guihouse.criptocoins.models.CryptoCoin;
-import us.guihouse.criptocoins.repositories.CryptocoinsSQLiteOpenHelper;
+import us.guihouse.criptocoins.repositories.RepositoryManager;
+import us.guihouse.criptocoins.repositories.RepositoryManagerCallback;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity implements RepositoryManagerCallback, AsyncTaskHttpResult {
 
     private static final String URLREQUEST = "https://api.coinmarketcap.com/v1/ticker?limit=10";
-    private AsyncTaskRequestHttp asyncTaskHttp;
-    private AsyncTaskDataBase asyncTaskDataBase;
+    private RepositoryManager repositoryManager;
+
+    private RequestHttpAsyncTask asyncTaskHttp;
     private ListView lvCryptocoins;
     private CryptocoinAdapter adapter;
-    private List<CryptoCoin> cryptoCoins;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,29 +29,25 @@ public class MainActivity extends AppCompatActivity{
 
         lvCryptocoins = (ListView) findViewById(R.id.lvCryptocoins);
 
+        repositoryManager = new RepositoryManager(this, this);
+    }
 
+    @Override
+    public void onManagerReady() {
+        doRequest();
+    }
 
-        /*asyncTaskDataBase = new AsyncTaskDataBase(
-                new AsyncTaskResult() {
-                    @Override
-                    public void onAsyncTaskResult(CryptocoinsSQLiteOpenHelper result) {
+    private void doRequest() {
+        if (asyncTaskHttp != null) {
+            return;
+        }
 
-                    }
-                }, MainActivity.this);*/ //TODO
-
-
-        asyncTaskHttp = new AsyncTaskRequestHttp(
-            new AsyncTaskResult() {
-                @Override
-                public void onAsyncTaskResult(ArrayList<CryptoCoin> result) {
-                    cryptoCoins = result;
-                    adapter = new CryptocoinAdapter(MainActivity.this, R.layout.cryptocoin_row_item, cryptoCoins);
-
-                    lvCryptocoins.setAdapter(adapter);
-                }
-            }, URLREQUEST);
-
+        asyncTaskHttp = new RequestHttpAsyncTask(this, URLREQUEST);
         asyncTaskHttp.execute();
     }
 
+    @Override
+    public void onFetchSuccess(ArrayList<CryptoCoin> result) {
+        asyncTaskHttp = null;
+    }
 }

@@ -33,9 +33,8 @@ public class CryptocoinsSQLiteOpenHelper extends SQLiteOpenHelper {
 
         sqlString.append("CREATE TABLE cryptocoins (");
         sqlString.append("id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,");
-        sqlString.append("idString CHAR(100) NOT NULL,");
+        sqlString.append("idString CHAR(100) NOT NULL UNIQUE,");
         sqlString.append("name CHAR(360) NOT NULL,");
-        sqlString.append("symbol CHAR(16) NOT NULL,");
         sqlString.append("symbol CHAR(16) NOT NULL,");
         sqlString.append("rank INTEGER NOT NULL,");
         sqlString.append("price_usd REAL NOT NULL,");
@@ -48,12 +47,12 @@ public class CryptocoinsSQLiteOpenHelper extends SQLiteOpenHelper {
         sqlString.append("percent_change_7 REAL NOT NULL,");
         sqlString.append("last_update_timestamp BIGINT NOT NULL);");
 
+        sqlString.append("CREATE INDEX rank_index ON cryptocoins(rank);");
 
         sqlString.append("CREATE TABLE favorite_cryptocoins (");
         sqlString.append("id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,");
         sqlString.append("id_cryptocoin INT NOT NULL,");
         sqlString.append("FOREING KEY(id_cryptocoin) REFERENCES cryptocoins(id) );");
-
 
         return sqlString.toString();
     }

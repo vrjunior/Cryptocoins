@@ -31,6 +31,7 @@ public class RequestHttp {
 
             int responseCode = urlConnection.getResponseCode();
             System.out.println("\nSending 'POST' request to URL : " + requestUrl.toString());
+            //TODO: Lançar erro quando o status code for invalido
             System.out.println("Response Code : " + responseCode);
 
             try {

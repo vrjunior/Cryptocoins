@@ -1,4 +1,4 @@
-package us.guihouse.criptocoins;
+package us.guihouse.criptocoins.coinmarketcap_api;
 
 import android.os.AsyncTask;
 
@@ -7,20 +7,18 @@ import org.json.JSONException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 
-import us.guihouse.criptocoins.coinmarketcap_api.CryptoCoinParser;
-import us.guihouse.criptocoins.coinmarketcap_api.RequestHttp;
 import us.guihouse.criptocoins.models.CryptoCoin;
 
 /**
  * Created by valmir.massoni on 09/09/2016.
  */
-public class AsyncTaskRequestHttp extends AsyncTask<Void, ArrayList<CryptoCoin>, ArrayList<CryptoCoin>> {
+public class RequestHttpAsyncTask extends AsyncTask<Void, ArrayList<CryptoCoin>, ArrayList<CryptoCoin>> {
     private String url;
-    private AsyncTaskResult instance;
+    private AsyncTaskHttpResult callback;
 
-    public AsyncTaskRequestHttp(AsyncTaskResult instance, String url) {
+    public RequestHttpAsyncTask(AsyncTaskHttpResult callback, String url) {
         this.url = url;
-        this.instance = instance;
+        this.callback = callback;
     }
 
     @Override
@@ -45,7 +43,7 @@ public class AsyncTaskRequestHttp extends AsyncTask<Void, ArrayList<CryptoCoin>,
 
         } catch (JSONException e) {
              //Error to create JSONArray or json hash does not exist
-            //TODO: Informar erro e exibir botão para tentar novamente.
+            callback.onServerError();
         }
 
         return  result;
@@ -54,6 +52,6 @@ public class AsyncTaskRequestHttp extends AsyncTask<Void, ArrayList<CryptoCoin>,
     @Override
     protected void onPostExecute(ArrayList<CryptoCoin> result) {
         super.onPostExecute(result);
-        instance.onAsyncTaskResult(result);
+        callback.onFetchSuccess(result);
     }
 }
