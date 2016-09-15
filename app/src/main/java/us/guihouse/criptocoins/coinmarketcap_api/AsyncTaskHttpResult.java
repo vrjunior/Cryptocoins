@@ -12,5 +12,4 @@ public interface AsyncTaskHttpResult {
     void onFetchSuccess(ArrayList<CryptoCoin> result);
     void onFetchConnectionError();
     void onServerError();
-
 }

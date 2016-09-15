@@ -3,6 +3,7 @@ package us.guihouse.criptocoins;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
 import us.guihouse.criptocoins.coinmarketcap_api.RequestHttpAsyncTask;
 import us.guihouse.criptocoins.coinmarketcap_api.AsyncTaskHttpResult;
 import us.guihouse.criptocoins.models.CryptoCoin;
+import us.guihouse.criptocoins.repositories.CryptocoinRepository;
 import us.guihouse.criptocoins.repositories.RepositoryManager;
 import us.guihouse.criptocoins.repositories.RepositoryManagerCallback;
 
@@ -21,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
     private RequestHttpAsyncTask asyncTaskHttp;
     private ListView lvCryptocoins;
     private CryptocoinAdapter adapter;
+    private CryptocoinRepository cryptocoinRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,17 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
 
     @Override
     public void onFetchSuccess(ArrayList<CryptoCoin> result) {
-        asyncTaskHttp = null;
+        this.cryptocoinRepository = repositoryManager.getCryptocoinRepository();
+        this.cryptocoinRepository.insertAllCryptocoins(result); //ISSO NÃO É AQUI, APENAS PARA TESTAR
+    }
+
+    @Override
+    public void onFetchConnectionError() {
+        Toast.makeText(this, "Erro de conexão!", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onServerError() {
+        Toast.makeText(this, "Não foi possível atualizar os dados!", Toast.LENGTH_LONG).show();
     }
 }

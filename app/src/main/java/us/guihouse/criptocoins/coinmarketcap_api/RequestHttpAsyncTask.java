@@ -36,16 +36,15 @@ public class RequestHttpAsyncTask extends AsyncTask<Void, ArrayList<CryptoCoin>,
             result = parser.getCryptoCoinArrayList();
 
         } catch (MalformedURLException e) {
-            //URL initialize exception
+            callback.onFetchConnectionError();
 
         } catch (RequestHttp.RequestFail requestFail) {
-            //TODO: Informar erro e dar a opção de mudar de servidor.
+            callback.onFetchConnectionError();
 
         } catch (JSONException e) {
              //Error to create JSONArray or json hash does not exist
             callback.onServerError();
         }
-
         return  result;
     }
 

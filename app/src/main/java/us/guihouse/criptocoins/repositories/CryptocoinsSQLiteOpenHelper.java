@@ -44,7 +44,7 @@ public class CryptocoinsSQLiteOpenHelper extends SQLiteOpenHelper {
         sqlString.append("available_supply REAL NOT NULL,");
         sqlString.append("percent_change_1h REAL NOT NULL,");
         sqlString.append("percent_change_24h REAL NOT NULL,");
-        sqlString.append("percent_change_7 REAL NOT NULL,");
+        sqlString.append("percent_change_7d REAL NOT NULL,");
         sqlString.append("last_update_timestamp BIGINT NOT NULL);");
 
         sqlString.append("CREATE INDEX rank_index ON cryptocoins(rank);");
