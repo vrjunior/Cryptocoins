@@ -8,21 +8,20 @@ import org.json.JSONException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 
-import us.guihouse.criptocoins.MainActivity;
 import us.guihouse.criptocoins.models.CryptoCoin;
 import us.guihouse.criptocoins.repositories.CryptocoinRepository;
-import us.guihouse.criptocoins.repositories.RepositoryManager;
 
 /**
  * Created by valmir.massoni on 09/09/2016.
  */
-public class RequestHttpAsyncTask extends AsyncTask<Void, Void, Void> {
-    private String url;
+public class FetchTickerAsyncTask extends AsyncTask<Void, Void, Void> {
+    private static final String TAG = "FETCH_TIKER_TASK";
+    private static final String URLREQUEST = "https://api.coinmarketcap.com/v1/ticker";
+
     private AsyncTaskHttpResult callback;
     private CryptocoinRepository cryptoconRepository;
 
-    public RequestHttpAsyncTask(AsyncTaskHttpResult callback, String url, CryptocoinRepository cryptocoinRepository) {
-        this.url = url;
+    public FetchTickerAsyncTask(AsyncTaskHttpResult callback, CryptocoinRepository cryptocoinRepository) {
         this.callback = callback;
         this.cryptoconRepository = cryptocoinRepository;
     }
@@ -35,8 +34,8 @@ public class RequestHttpAsyncTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... voids) {
         try {
-            RequestHttp requestHttp = new RequestHttp(this.url);
-            String rawData = requestHttp.getTicker();
+            RequestHttp requestHttp = new RequestHttp(URLREQUEST);
+            String rawData = requestHttp.executeRequest();
             CryptoCoinParser parser = new CryptoCoinParser(rawData);
             ArrayList<CryptoCoin> result = parser.getCryptoCoinArrayList();
 
@@ -44,15 +43,16 @@ public class RequestHttpAsyncTask extends AsyncTask<Void, Void, Void> {
             this.cryptoconRepository.insertOrUpdateCryptocoins(result);
 
         } catch (MalformedURLException e) {
+            // Unexpected. The url is hard-coded
+            Log.e(TAG, e.getMessage(), e);
+        } catch (RequestHttp.NoConnection ex) {
             callback.onFetchConnectionError();
-
         } catch (RequestHttp.RequestFail requestFail) {
-            Log.d("Request Fail", requestFail.toString());
-            callback.onFetchConnectionError();
-
+            Log.e(TAG, requestFail.getMessage(), requestFail);
+            callback.onServerError();
         } catch (JSONException e) {
              //Error to create JSONArray or json hash does not exist
-            Log.d("Error Json", e.toString());
+            Log.e(TAG, e.getMessage(), e);
             callback.onServerError();
         }
 

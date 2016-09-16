@@ -1,14 +1,15 @@
 package us.guihouse.criptocoins;
 
+import android.app.LoaderManager;
+import android.content.Loader;
+import android.support.v4.content.CursorLoader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import us.guihouse.criptocoins.coinmarketcap_api.RequestHttpAsyncTask;
+import us.guihouse.criptocoins.coinmarketcap_api.FetchTickerAsyncTask;
 import us.guihouse.criptocoins.coinmarketcap_api.AsyncTaskHttpResult;
 import us.guihouse.criptocoins.models.CryptoCoin;
 import us.guihouse.criptocoins.repositories.CryptocoinRepository;
@@ -17,10 +18,10 @@ import us.guihouse.criptocoins.repositories.RepositoryManagerCallback;
 
 public class MainActivity extends AppCompatActivity implements RepositoryManagerCallback, AsyncTaskHttpResult {
 
-    private static final String URLREQUEST = "https://api.coinmarketcap.com/v1/ticker?limit=10";
+
     private RepositoryManager repositoryManager;
 
-    private RequestHttpAsyncTask asyncTaskHttp;
+    private FetchTickerAsyncTask asyncTaskHttp;
     private ListView lvCryptocoins;
     private CryptocoinAdapter adapter;
     private CryptocoinRepository cryptocoinRepository;
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
         lvCryptocoins = (ListView) findViewById(R.id.lvCryptocoins);
         listViewOffset = 0;
         repositoryManager = new RepositoryManager(this, this);
+
     }
 
     @Override
@@ -47,14 +49,14 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
             return;
         }
 
-        asyncTaskHttp = new RequestHttpAsyncTask(this, URLREQUEST, repositoryManager.getCryptocoinRepository());
+        asyncTaskHttp = new FetchTickerAsyncTask(this, repositoryManager.getCryptocoinRepository());
         asyncTaskHttp.execute();
     }
 
     @Override
     public void onFetchSuccess() {
         this.cryptocoinRepository = repositoryManager.getCryptocoinRepository();
-        this.appendCryptocoinsToListView(cryptocoinRepository.getCryptocoins(this.listViewLimit, this.listViewOffset));
+        //this.appendCryptocoinsToListView(cryptocoinRepository.getCryptocoins(this.listViewLimit, this.listViewOffset));
     }
 
     @Override
