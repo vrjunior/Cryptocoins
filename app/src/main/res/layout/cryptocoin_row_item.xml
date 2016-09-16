@@ -2,12 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:id="@+id/ivCoinLogo"/>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:id="@+id/llNameInfo">
+        android:id="@+id/llNameInfo"
+        android:layout_marginLeft="10dp">
         
         <TextView
             android:layout_width="wrap_content"
@@ -26,22 +33,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tvPrice"
-        android:textSize="20dp"/>
+        android:textSize="20dp"
+        android:layout_marginLeft="10dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tvVolume24h"
-        android:textSize="20dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvPercentChange24h"/>
+        android:id="@+id/tvPercentChange24h"
+        android:layout_marginLeft="10dp"/>
 
     <Switch
         android:layout_width="22dp"
         android:layout_height="22dp"
-        android:id="@+id/stcFavorite"/>
+        android:id="@+id/stcFavorite"
+        android:layout_marginLeft="10dp"/>
 
 </LinearLayout>

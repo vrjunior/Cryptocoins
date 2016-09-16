@@ -24,6 +24,8 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
     private ListView lvCryptocoins;
     private CryptocoinAdapter adapter;
     private CryptocoinRepository cryptocoinRepository;
+    private int listViewOffset;
+    private final int listViewLimit = 20;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,13 +33,13 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
         setContentView(R.layout.activity_main);
 
         lvCryptocoins = (ListView) findViewById(R.id.lvCryptocoins);
-
+        listViewOffset = 0;
         repositoryManager = new RepositoryManager(this, this);
     }
 
     @Override
     public void onManagerReady() {
-        doRequest();
+        this.doRequest();
     }
 
     private void doRequest() {
@@ -45,23 +47,34 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
             return;
         }
 
-        asyncTaskHttp = new RequestHttpAsyncTask(this, URLREQUEST);
+        asyncTaskHttp = new RequestHttpAsyncTask(this, URLREQUEST, repositoryManager.getCryptocoinRepository());
         asyncTaskHttp.execute();
     }
 
     @Override
-    public void onFetchSuccess(ArrayList<CryptoCoin> result) {
+    public void onFetchSuccess() {
         this.cryptocoinRepository = repositoryManager.getCryptocoinRepository();
-        this.cryptocoinRepository.insertAllCryptocoins(result); //ISSO NÃO É AQUI, APENAS PARA TESTAR
+        this.appendCryptocoinsToListView(cryptocoinRepository.getCryptocoins(this.listViewLimit, this.listViewOffset));
     }
 
     @Override
     public void onFetchConnectionError() {
-        Toast.makeText(this, "Erro de conexão!", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "Erro de conexão!", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onServerError() {
-        Toast.makeText(this, "Não foi possível atualizar os dados!", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "Não foi possível atualizar os dados!", Toast.LENGTH_LONG).show();
+    }
+
+    private void appendCryptocoinsToListView(ArrayList<CryptoCoin> cryptocoins) {
+        if(this.adapter == null) {
+            adapter = new CryptocoinAdapter(this, R.layout.cryptocoin_row_item, cryptocoins);
+            lvCryptocoins.setAdapter(adapter);
+        }
+        else {
+            adapter.addAll(cryptocoins);
+            adapter.notifyDataSetChanged();
+        }
     }
 }

@@ -21,9 +21,8 @@ public class RepositoryManager {
             @Override
             protected void onPostExecute(SQLiteDatabase database) {
                 super.onPostExecute(database);
-                callback.onManagerReady();
-
                 cryptocoinRepository = new CryptocoinRepository(database);
+                callback.onManagerReady();
             }
         }.execute();
     }

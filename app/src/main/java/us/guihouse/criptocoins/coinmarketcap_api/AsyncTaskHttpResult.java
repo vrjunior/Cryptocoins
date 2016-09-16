@@ -9,7 +9,7 @@ import us.guihouse.criptocoins.repositories.CryptocoinsSQLiteOpenHelper;
  * Created by valmir.massoni on 09/09/2016.
  */
 public interface AsyncTaskHttpResult {
-    void onFetchSuccess(ArrayList<CryptoCoin> result);
+    void onFetchSuccess();
     void onFetchConnectionError();
     void onServerError();
 }

@@ -19,11 +19,12 @@ public class CryptocoinRepository {
         this.database = database;
     }
 
-    public void insertAllCryptocoins(ArrayList<CryptoCoin> ccs) {
+    public void insertOrUpdateCryptocoins(ArrayList<CryptoCoin> ccs) {
         ContentValues content = new ContentValues();
 
+        database.beginTransaction();
         for (CryptoCoin cc: ccs) {
-            content.put("idString", cc.getId());
+            content.put("id_string", cc.getId());
             content.put("name", cc.getName());
             content.put("symbol", cc.getSymbol());
             content.put("rank", cc.getRankPosition());
@@ -35,32 +36,37 @@ public class CryptocoinRepository {
             content.put("percent_change_1h", cc.getPercentChange1h());
             content.put("percent_change_24h", cc.getPercentChange24h());
             content.put("percent_change_7d", cc.getPercentChange7d());
-            content.put("last_update_timestamp", cc.getLast_updated());
+            content.put("last_update_timestamp", cc.getLastUpdated());
 
-            database.insert("cryptocoins", null, content);
+            database.insertWithOnConflict("cryptocoins", null, content, SQLiteDatabase.CONFLICT_REPLACE);
             content.clear();
         }
+        database.setTransactionSuccessful();
+        database.endTransaction();
+        return;
     }
 
-    public ArrayList<CryptoCoin> getCryptocoins(int offSet, int limit) {
-        ArrayList<CryptoCoin> result= new ArrayList<>();
+    public ArrayList<CryptoCoin> getCryptocoins(int limit, int offSet) {
+        ArrayList<CryptoCoin> result = new ArrayList<>();
         StringBuilder sql = new StringBuilder();
-        sql.append("SELECT idString, name, symbol, rank, price_usd, price_btc, volume_usd_24h, " +
+        sql.append("SELECT id_string, name, symbol, rank, price_usd, price_btc, volume_usd_24h, " +
                 "market_cap_usd, available_supply, percent_change_1h, percent_change_24h, percent_change_7d, " +
-                "last_update_timestamp");
+                "last_update_timestamp ");
         sql.append("FROM cryptocoins ");
-        sql.append("LIMIT " + limit + ", " + offSet);
+       sql.append("LIMIT " + limit + " OFFSET " + offSet);
 
         Cursor cursor = database.rawQuery(sql.toString(), null);
         CryptoCoin cc;
-        while(cursor.moveToNext()) {
-            cc = new CryptoCoin(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getInt(3),
-                    cursor.getDouble(4), cursor.getDouble(5), cursor.getDouble(6), cursor.getDouble(7), cursor.getDouble(8),
-                    cursor.getDouble(9), cursor.getDouble(10), cursor.getDouble(11), cursor.getDouble(12), cursor.getLong(13));
+        if(cursor.moveToFirst()) {
+            do {
+                cc = new CryptoCoin(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getInt(3),
+                        cursor.getDouble(4), cursor.getDouble(5), cursor.getDouble(6), cursor.getDouble(7), cursor.getDouble(8),
+                        cursor.getDouble(9), cursor.getDouble(10), cursor.getDouble(11), cursor.getDouble(12), cursor.getLong(13));
 
-            result.add(cc);
+                result.add(cc);
+            } while (cursor.moveToNext());
         }
-
+        cursor.close();
         return result;
     }
 

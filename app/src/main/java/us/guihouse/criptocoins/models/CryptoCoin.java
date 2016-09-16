@@ -17,7 +17,7 @@ public class CryptoCoin {
     private double percentChange1h;
     private double percentChange24h;
     private double percentChange7d;
-    private long last_updated; //DateTime?
+    private long lastUpdated; //DateTime?
 
     public CryptoCoin(String id, String name, String symbol, int rankPosition, double priceUsd, double priceBtc,
                         double volumeUsdLast24h, double marketCapUsd, double availableSupply, double totalSupply,
@@ -36,7 +36,7 @@ public class CryptoCoin {
         this.percentChange1h = percentChange1h;
         this.percentChange24h = percentChange24h;
         this.percentChange7d = percentChange7d;
-        this.last_updated = last_updated;
+        this.lastUpdated = last_updated;
     }
 
     public String getId() {
@@ -91,7 +91,7 @@ public class CryptoCoin {
         return percentChange7d;
     }
 
-    public long getLast_updated() {
-        return last_updated;
+    public long getLastUpdated() {
+        return lastUpdated;
     }
 }

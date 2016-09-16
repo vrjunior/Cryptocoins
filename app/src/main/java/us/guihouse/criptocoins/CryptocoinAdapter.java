@@ -1,10 +1,13 @@
 package us.guihouse.criptocoins;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -33,11 +36,13 @@ public class CryptocoinAdapter extends ArrayAdapter<CryptoCoin> {
         CryptoCoin cryptoCoin = getItem(position);
 
         if(cryptoCoin != null) {
+            ImageView ivCoinLogo = (ImageView) v.findViewById(R.id.ivCoinLogo);
             TextView tvCoinName = (TextView) v.findViewById(R.id.tvCoinName);
             TextView tvCoinSymbol = (TextView) v.findViewById(R.id.tvCoinSymbol);
             TextView tvPrice = (TextView) v.findViewById(R.id.tvPrice);
-            TextView tvVolume24h = (TextView) v.findViewById(R.id.tvVolume24h);
             TextView tvPercentChange24h = (TextView) v.findViewById(R.id.tvPercentChange24h);
+            int currentImageId = v.getResources().getIdentifier(cryptoCoin.getId(), "assets", v.getContext().getPackageName());
+
 
             if(tvCoinName != null) {
                 tvCoinName.setText(cryptoCoin.getName());
@@ -47,9 +52,6 @@ public class CryptocoinAdapter extends ArrayAdapter<CryptoCoin> {
             }
             if(tvPrice != null) {
                 tvPrice.setText(String.format("$ %.2f", cryptoCoin.getPriceUsd()));
-            }
-            if(tvVolume24h != null) {
-                tvVolume24h.setText(String.format("$ %.2f", cryptoCoin.getVolumeUsdLast24h()));
             }
             if(tvPercentChange24h != null) {
                 tvPercentChange24h.setText(String.format("%.2f %%", cryptoCoin.getVolumeUsdLast24h()));
