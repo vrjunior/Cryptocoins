@@ -15,8 +15,9 @@ import us.guihouse.criptocoins.models.CryptoCoin;
 import us.guihouse.criptocoins.repositories.CryptocoinRepository;
 import us.guihouse.criptocoins.repositories.RepositoryManager;
 import us.guihouse.criptocoins.repositories.RepositoryManagerCallback;
+import us.guihouse.criptocoins.repositories.SelectDataBaseCallback;
 
-public class MainActivity extends AppCompatActivity implements RepositoryManagerCallback, AsyncTaskHttpResult {
+public class MainActivity extends AppCompatActivity implements RepositoryManagerCallback, AsyncTaskHttpResult, SelectDataBaseCallback {
 
 
     private RepositoryManager repositoryManager;
@@ -78,5 +79,9 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
             adapter.addAll(cryptocoins);
             adapter.notifyDataSetChanged();
         }
+    }
+
+    public void onSelectResult(ArrayList<CryptoCoin> result) {
+
     }
 }

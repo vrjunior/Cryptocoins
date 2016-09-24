@@ -9,10 +9,10 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="us.guihouse.criptocoins.MainActivity">
 
-    <ListView
+    <view
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        class="android.support.v7.widget.RecyclerView"
         android:id="@+id/lvCryptocoins">
-
-    </ListView>
+    </view>
 </RelativeLayout>

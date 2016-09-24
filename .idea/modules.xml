@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Cryptocoins.iml" filepath="$PROJECT_DIR$/Cryptocoins.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cryptocoins.iml" filepath="$PROJECT_DIR$/cryptocoins.iml" />
     </modules>
   </component>
 </project>

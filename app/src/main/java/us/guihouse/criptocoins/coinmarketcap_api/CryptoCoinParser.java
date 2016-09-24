@@ -5,6 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import us.guihouse.criptocoins.models.CryptoCoin;
 
@@ -31,16 +32,25 @@ public class CryptoCoinParser {
         Double percentChange24h;
         Double percentChange7d;
 
+        volumeUsd24hours = 0.0;
+        marketCapUsd = 0.0;
+        availableSupply = 0.0;
+        totalSupply = 0.0;
+        percentChange1h = 0.0;
+        percentChange24h = 0.0;
+        percentChange7d = 0.0;
+
+
         for(int i = 0; i < jsonArray.length(); i++) {
             JSONObj = jsonArray.getJSONObject(i);
 
-            volumeUsd24hours = 0.0;
-            marketCapUsd = 0.0;
-            availableSupply = 0.0;
-            totalSupply = 0.0;
-            percentChange1h = 0.0;
-            percentChange24h = 0.0;
-            percentChange7d = 0.0;
+            /*Iterator keys = JSONObj.keys();
+            while (keys.hasNext()) {
+                String key = (String) keys.next();
+                if(JSONObj.isNull(key)) {
+                     = JSONObj.getDouble(key);
+                }
+            }*/
 
             if(!JSONObj.isNull("24h_volume_usd")) {
                 volumeUsd24hours = JSONObj.getDouble("24h_volume_usd");
@@ -63,6 +73,7 @@ public class CryptoCoinParser {
             if(!JSONObj.isNull("percent_change_7d")) {
                 percentChange7d = JSONObj.getDouble("percent_change_7d");
             }
+
 
             currentCryptoCoin = new CryptoCoin( JSONObj.getString("id"),
                     JSONObj.getString("name"),

@@ -11,7 +11,7 @@ import us.guihouse.criptocoins.repositories.CryptocoinRepository;
 /**
  * Created by aluno on 16/09/16.
  */
-public class CryptocoinsProvider extends ContentProvider {
+/*public class CryptocoinsProvider extends ContentProvider {
     private CryptocoinRepository repository;
 
     public CryptocoinsProvider(CryptocoinRepository repository) {
@@ -26,7 +26,7 @@ public class CryptocoinsProvider extends ContentProvider {
     @Nullable
     @Override
     public Cursor query(Uri uri, String[] strings, String s, String[] strings1, String s1) {
-        return repository.getCryptocoins();
+        //return repository.getCryptocoins();
     }
 
     @Nullable
@@ -50,4 +50,4 @@ public class CryptocoinsProvider extends ContentProvider {
     public int update(Uri uri, ContentValues contentValues, String s, String[] strings) {
         return 0;
     }
-}
+}*/
