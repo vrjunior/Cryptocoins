@@ -4,9 +4,10 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
         android:layout_gravity="center_vertical"
+        android:layout_marginLeft="16dp"
         android:id="@+id/ivCoinLogo"/>
 
     <LinearLayout
@@ -20,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" 
             android:id="@+id/tvCoinName"
-            android:textSize="22dp"/>
+            android:textSize="20dp"/>
         
         <TextView
             android:layout_width="wrap_content"
@@ -32,13 +33,16 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:id="@+id/tvPrice"
         android:textSize="20dp"
-        android:layout_marginLeft="10dp"/>
+        android:layout_marginLeft="16dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:textColor="@color/red_text"
         android:id="@+id/tvPercentChange24h"
         android:layout_marginLeft="10dp"/>
 
@@ -46,6 +50,6 @@
         android:layout_width="22dp"
         android:layout_height="22dp"
         android:id="@+id/stcFavorite"
-        android:layout_marginLeft="10dp"/>
+        android:layout_marginLeft="16dp"/>
 
 </LinearLayout>
