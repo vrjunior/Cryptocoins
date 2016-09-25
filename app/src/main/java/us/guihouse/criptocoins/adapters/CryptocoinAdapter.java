@@ -1,9 +1,7 @@
-package us.guihouse.criptocoins;
+package us.guihouse.criptocoins.adapters;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import us.guihouse.criptocoins.R;
 import us.guihouse.criptocoins.models.CryptoCoin;
 
 /**

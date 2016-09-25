@@ -1,21 +1,17 @@
 package us.guihouse.criptocoins;
 
-import android.app.LoaderManager;
-import android.content.Loader;
-import android.support.v4.content.CursorLoader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import us.guihouse.criptocoins.adapters.CryptocoinAdapter;
 import us.guihouse.criptocoins.coinmarketcap_api.FetchTickerAsyncTask;
 import us.guihouse.criptocoins.coinmarketcap_api.AsyncTaskHttpResult;
 import us.guihouse.criptocoins.models.CryptoCoin;
 import us.guihouse.criptocoins.repositories.AsyncTaskSelectDatabase;
-import us.guihouse.criptocoins.repositories.CryptocoinRepository;
 import us.guihouse.criptocoins.repositories.RepositoryManager;
 import us.guihouse.criptocoins.repositories.RepositoryManagerCallback;
 import us.guihouse.criptocoins.repositories.SelectDataBaseCallback;
@@ -37,6 +33,13 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
         setContentView(R.layout.activity_main);
 
         rvCryptocoins = (RecyclerView) findViewById(R.id.rvCryptocoins);
+
+
+        //Diz para a recyclerView que o tamanho do layout não irá mudar durante a execução.
+        //Isso melhora a performance do app
+        rvCryptocoins.setHasFixedSize(true);
+
+        //Define o layout manager, que irá consumir do adapter, conforme necessário
         mLayoutManager = new LinearLayoutManager(this);
         rvCryptocoins.setLayoutManager(mLayoutManager);
 
