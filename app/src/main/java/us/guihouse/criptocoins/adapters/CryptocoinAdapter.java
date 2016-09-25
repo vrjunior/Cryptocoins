@@ -55,8 +55,8 @@ public class CryptocoinAdapter extends RecyclerView.Adapter<CryptocoinAdapter.Cu
 
         holder.tvCoinName.setText(cryptoCoin.getName());
         holder.tvCoinSymbol.setText(cryptoCoin.getSymbol());
-        holder.tvPrice.setText(String.format("$%.2f", cryptoCoin.getPriceUsd()));
-        holder.tvPercentChange24h.setText(String.format("%.2f %%", cryptoCoin.getPercentChange24h()));
+        holder.tvPrice.setText(String.format("$%.6f", cryptoCoin.getPriceUsd()));
+        holder.tvPercentChange24h.setText(String.format("%.2f%%", cryptoCoin.getPercentChange24h()));
         if(cryptoCoin.getPercentChange24h() >= 0) {
             holder.tvPercentChange24h.setTextColor(ContextCompat.getColor(mContext, R.color.green_text));
         }

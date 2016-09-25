@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
     private RecyclerView rvCryptocoins;
     private SwipeRefreshLayout srlRvCryptocoins;
     private CryptocoinAdapter adapter;
-    private ArrayList<CryptoCoin> cryptonsFeedList;
     private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
@@ -47,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
         rvCryptocoins.setLayoutManager(mLayoutManager);
 
         repositoryManager = new RepositoryManager(this, this);
+        srlRvCryptocoins.setRefreshing(true);
 
         srlRvCryptocoins.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -62,12 +62,7 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
     }
 
     private void doRequest() {
-        /*if (asyncTaskHttp != null) {
-            return;
-        }*/ // why guilhermezera?
-
-        asyncTaskHttp = new FetchTickerAsyncTask(this, repositoryManager.getCryptocoinRepository());
-        asyncTaskHttp.execute();
+        this.selectDataToShow();
     }
 
     @Override
@@ -84,23 +79,28 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
     @Override
     public void onServerError() {
         //Toast.makeText(this, "Não foi possível atualizar os dados!", Toast.LENGTH_LONG).show();
+        this.selectDataToShow();
     }
 
 
     //CALLBACK DO SELECT DO SQLITE
     public void onSelectResult(ArrayList<CryptoCoin> result) {
-        this.cryptonsFeedList = result;
-        this.setOrUpdateRecyclerView();
+        this.setOrUpdateRecyclerView(result);
     }
 
-    private void setOrUpdateRecyclerView() {
+    private void selectDataToShow() {
+        asyncTaskHttp = new FetchTickerAsyncTask(this, repositoryManager.getCryptocoinRepository());
+        asyncTaskHttp.execute();
+    }
+
+    private void setOrUpdateRecyclerView(ArrayList<CryptoCoin> cryptonsFeedList) {
         if(this.adapter == null) {
-            this.adapter = new CryptocoinAdapter(this, R.layout.cryptocoin_row_item, this.cryptonsFeedList);
+            this.adapter = new CryptocoinAdapter(this, R.layout.cryptocoin_row_item, cryptonsFeedList);
             this.rvCryptocoins.setAdapter(adapter);
         }
         else {
             this.adapter.updateData(cryptonsFeedList);
-            srlRvCryptocoins.setRefreshing(false);
         }
+        srlRvCryptocoins.setRefreshing(false);
     }
 }
