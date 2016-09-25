@@ -39,8 +39,12 @@ public class RequestHttp {
             Log.d(TAG, "Sending 'GET' request to " + requestUrl.toString());
 
             urlConnection = (HttpURLConnection) this.requestUrl.openConnection();
+            urlConnection.setDefaultUseCaches(false);
+            urlConnection.setUseCaches(false);
             urlConnection.setRequestMethod("GET");
             urlConnection.addRequestProperty("Accept", "application/json");
+            urlConnection.setRequestProperty("Pragma", "no-cache");
+            urlConnection.setRequestProperty("Cache-Control", "no-cache");
 
             int responseCode = urlConnection.getResponseCode();
             Log.d(TAG, "Response Code: " + responseCode);

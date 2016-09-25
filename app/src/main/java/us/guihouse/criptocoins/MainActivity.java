@@ -62,18 +62,19 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
     }
 
     private void doRequest() {
-        this.selectDataToShow();
+        asyncTaskHttp = new FetchTickerAsyncTask(this, repositoryManager.getCryptocoinRepository());
+        asyncTaskHttp.execute();
     }
 
     @Override
     public void onFetchSuccess() {
-        AsyncTaskSelectDatabase asyncTaskSelect = new AsyncTaskSelectDatabase(this, this.repositoryManager.getCryptocoinRepository());
-        asyncTaskSelect.execute();
+        this.selectDataToShow();
     }
 
     @Override
     public void onFetchConnectionError() {
         //Toast.makeText(this, "Erro de conexão!", Toast.LENGTH_LONG).show();
+        this.selectDataToShow();
     }
 
     @Override
@@ -89,8 +90,8 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
     }
 
     private void selectDataToShow() {
-        asyncTaskHttp = new FetchTickerAsyncTask(this, repositoryManager.getCryptocoinRepository());
-        asyncTaskHttp.execute();
+        AsyncTaskSelectDatabase asyncTaskSelect = new AsyncTaskSelectDatabase(this, this.repositoryManager.getCryptocoinRepository());
+        asyncTaskSelect.execute();
     }
 
     private void setOrUpdateRecyclerView(ArrayList<CryptoCoin> cryptonsFeedList) {
