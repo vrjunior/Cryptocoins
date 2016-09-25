@@ -5,6 +5,8 @@ import android.content.Loader;
 import android.support.v4.content.CursorLoader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -12,6 +14,7 @@ import java.util.ArrayList;
 import us.guihouse.criptocoins.coinmarketcap_api.FetchTickerAsyncTask;
 import us.guihouse.criptocoins.coinmarketcap_api.AsyncTaskHttpResult;
 import us.guihouse.criptocoins.models.CryptoCoin;
+import us.guihouse.criptocoins.repositories.AsyncTaskSelectDatabase;
 import us.guihouse.criptocoins.repositories.CryptocoinRepository;
 import us.guihouse.criptocoins.repositories.RepositoryManager;
 import us.guihouse.criptocoins.repositories.RepositoryManagerCallback;
@@ -23,21 +26,21 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
     private RepositoryManager repositoryManager;
 
     private FetchTickerAsyncTask asyncTaskHttp;
-    private ListView lvCryptocoins;
+    private RecyclerView rvCryptocoins;
     private CryptocoinAdapter adapter;
-    private CryptocoinRepository cryptocoinRepository;
-    private int listViewOffset;
-    private final int listViewLimit = 20;
+    private ArrayList<CryptoCoin> cryptonsFeedList;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        lvCryptocoins = (ListView) findViewById(R.id.lvCryptocoins);
-        listViewOffset = 0;
-        repositoryManager = new RepositoryManager(this, this);
+        rvCryptocoins = (RecyclerView) findViewById(R.id.rvCryptocoins);
+        mLayoutManager = new LinearLayoutManager(this);
+        rvCryptocoins.setLayoutManager(mLayoutManager);
 
+        repositoryManager = new RepositoryManager(this, this);
     }
 
     @Override
@@ -56,8 +59,8 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
 
     @Override
     public void onFetchSuccess() {
-        this.cryptocoinRepository = repositoryManager.getCryptocoinRepository();
-        //this.appendCryptocoinsToListView(cryptocoinRepository.getCryptocoins(this.listViewLimit, this.listViewOffset));
+        AsyncTaskSelectDatabase asyncTaskSelect = new AsyncTaskSelectDatabase(this, this.repositoryManager.getCryptocoinRepository());
+        asyncTaskSelect.execute();
     }
 
     @Override
@@ -70,18 +73,11 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
         //Toast.makeText(this, "Não foi possível atualizar os dados!", Toast.LENGTH_LONG).show();
     }
 
-    private void appendCryptocoinsToListView(ArrayList<CryptoCoin> cryptocoins) {
-        if(this.adapter == null) {
-            adapter = new CryptocoinAdapter(this, R.layout.cryptocoin_row_item, cryptocoins);
-            lvCryptocoins.setAdapter(adapter);
-        }
-        else {
-            adapter.addAll(cryptocoins);
-            adapter.notifyDataSetChanged();
-        }
-    }
 
+    //CALLBACK DO SELECT DO SQLITE
     public void onSelectResult(ArrayList<CryptoCoin> result) {
-
+        this.cryptonsFeedList = result;
+        adapter = new CryptocoinAdapter(this, R.layout.cryptocoin_row_item, this.cryptonsFeedList);
+        rvCryptocoins.setAdapter(adapter);
     }
 }

@@ -7,11 +7,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import us.guihouse.criptocoins.models.CryptoCoin;
@@ -28,12 +26,13 @@ public class CryptocoinAdapter extends RecyclerView.Adapter<CryptocoinAdapter.Cu
         this.cryptocoinItens = objects;
         this.mContext = context;
     }
-    
+
     @Override
     public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cryptocoin_row_item, null);
 
         CustomViewHolder viewHolder = new CustomViewHolder(view);
+
         return viewHolder;
     }
 
@@ -41,15 +40,17 @@ public class CryptocoinAdapter extends RecyclerView.Adapter<CryptocoinAdapter.Cu
     public void onBindViewHolder(CustomViewHolder holder, int position) {
         CryptoCoin cryptoCoin = cryptocoinItens.get(position);
 
-        if(cryptoCoin != null) {
+        //TODO: setar a imagem logo da moeda
+        holder.tvCoinName.setText(cryptoCoin.getName());
+        holder.tvCoinSymbol.setText(cryptoCoin.getSymbol());
+        holder.tvPrice.setText(String.format("$ %.2f", cryptoCoin.getPriceUsd()));
+        holder.tvPercentChange24h.setText(String.format("%.2f %%", cryptoCoin.getPercentChange24h()));
 
-
-        }
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return (null != cryptocoinItens ? cryptocoinItens.size() : 0); //ternária que devolve o tamanho se o arrayList não for nulo e zero se for
     }
 
     public class CustomViewHolder extends RecyclerView.ViewHolder {

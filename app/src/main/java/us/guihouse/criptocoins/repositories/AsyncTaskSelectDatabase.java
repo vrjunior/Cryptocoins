@@ -14,14 +14,10 @@ public class AsyncTaskSelectDatabase extends AsyncTask <Void, ArrayList<CryptoCo
 
     private SelectDataBaseCallback instance;
     private CryptocoinRepository cryptocoinRepository;
-    private int limit;
-    private int offset;
 
-    public AsyncTaskSelectDatabase(SelectDataBaseCallback instance, CryptocoinRepository cryptocoinRepository, int limit, int offset) {
+    public AsyncTaskSelectDatabase(SelectDataBaseCallback instance, CryptocoinRepository cryptocoinRepository) {
         this.instance = instance;
         this.cryptocoinRepository = cryptocoinRepository;
-        this.limit = limit;
-        this.offset = offset;
     }
 
     @Override
@@ -31,7 +27,7 @@ public class AsyncTaskSelectDatabase extends AsyncTask <Void, ArrayList<CryptoCo
 
     @Override
     protected ArrayList<CryptoCoin> doInBackground(Void... params) {
-        ArrayList<CryptoCoin> result = cryptocoinRepository.getCryptocoins(this.limit, this.offset);
+        ArrayList<CryptoCoin> result = cryptocoinRepository.getAllCryptocoins();
 
         return result;
     }

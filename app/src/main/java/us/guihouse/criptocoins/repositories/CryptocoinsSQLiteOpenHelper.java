@@ -42,6 +42,7 @@ public class CryptocoinsSQLiteOpenHelper extends SQLiteOpenHelper {
         sqlString.append("volume_usd_24h REAL NOT NULL,");
         sqlString.append("market_cap_usd REAL NOT NULL,");
         sqlString.append("available_supply REAL NOT NULL,");
+        sqlString.append("total_supply REAL NOT NULL,");
         sqlString.append("percent_change_1h REAL NOT NULL,");
         sqlString.append("percent_change_24h REAL NOT NULL,");
         sqlString.append("percent_change_7d REAL NOT NULL,");
