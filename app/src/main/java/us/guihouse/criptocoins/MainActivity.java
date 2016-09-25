@@ -1,5 +1,6 @@
 package us.guihouse.criptocoins;
 
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
 
     private FetchTickerAsyncTask asyncTaskHttp;
     private RecyclerView rvCryptocoins;
+    private SwipeRefreshLayout srlRvCryptocoins;
     private CryptocoinAdapter adapter;
     private ArrayList<CryptoCoin> cryptonsFeedList;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -33,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
         setContentView(R.layout.activity_main);
 
         rvCryptocoins = (RecyclerView) findViewById(R.id.rvCryptocoins);
+        srlRvCryptocoins = (SwipeRefreshLayout) findViewById(R.id.srlRvCryptocoins);
 
 
         //Diz para a recyclerView que o tamanho do layout não irá mudar durante a execução.
@@ -44,6 +47,13 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
         rvCryptocoins.setLayoutManager(mLayoutManager);
 
         repositoryManager = new RepositoryManager(this, this);
+
+        srlRvCryptocoins.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                doRequest();
+            }
+        });
     }
 
     @Override
@@ -52,9 +62,9 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
     }
 
     private void doRequest() {
-        if (asyncTaskHttp != null) {
+        /*if (asyncTaskHttp != null) {
             return;
-        }
+        }*/ // why guilhermezera?
 
         asyncTaskHttp = new FetchTickerAsyncTask(this, repositoryManager.getCryptocoinRepository());
         asyncTaskHttp.execute();
@@ -80,7 +90,17 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
     //CALLBACK DO SELECT DO SQLITE
     public void onSelectResult(ArrayList<CryptoCoin> result) {
         this.cryptonsFeedList = result;
-        adapter = new CryptocoinAdapter(this, R.layout.cryptocoin_row_item, this.cryptonsFeedList);
-        rvCryptocoins.setAdapter(adapter);
+        this.setOrUpdateRecyclerView();
+    }
+
+    private void setOrUpdateRecyclerView() {
+        if(this.adapter == null) {
+            this.adapter = new CryptocoinAdapter(this, R.layout.cryptocoin_row_item, this.cryptonsFeedList);
+            this.rvCryptocoins.setAdapter(adapter);
+        }
+        else {
+            this.adapter.updateData(cryptonsFeedList);
+            srlRvCryptocoins.setRefreshing(false);
+        }
     }
 }

@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import us.guihouse.criptocoins.R;
@@ -69,6 +70,13 @@ public class CryptocoinAdapter extends RecyclerView.Adapter<CryptocoinAdapter.Cu
     public int getItemCount() {
         return (null != cryptocoinItens ? cryptocoinItens.size() : 0); //ternária que devolve o tamanho se o arrayList não for nulo e zero se for
     }
+
+    public void updateData(ArrayList<CryptoCoin> newData) {
+        cryptocoinItens.clear();
+        cryptocoinItens.addAll(newData);
+        notifyDataSetChanged();
+    }
+
 
     public class CustomViewHolder extends RecyclerView.ViewHolder {
         protected ImageView ivCoinLogo;
