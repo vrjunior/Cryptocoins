@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">Criptocoins</string>
+    <string name="app_name">Cryptocoins</string>
+    <string name="lastUpdate">Last Update </string>
 </resources>

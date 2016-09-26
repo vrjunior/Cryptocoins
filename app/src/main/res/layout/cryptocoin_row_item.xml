@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
-    android:layout_marginBottom="10dp"
-    android:layout_marginTop="10dp"
+    android:paddingBottom="10dp"
+    android:paddingTop="10dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:layout_width="26dp"
@@ -25,8 +25,9 @@
             android:layout_height="wrap_content" 
             android:id="@+id/tvCoinName"
             android:layout_gravity="center_horizontal"
+            android:textStyle="bold"
+            android:lines="1"
             android:ellipsize="end"
-            android:maxLines="1"
             android:textSize="20dp"/>
         
         <TextView
@@ -43,7 +44,6 @@
         android:orientation="vertical"
         android:layout_gravity="center_vertical"
         android:id="@+id/llPriceInfo"
-        android:layout_weight=".30"
         android:layout_marginLeft="16dp">
 
         <TextView
@@ -61,11 +61,13 @@
             android:id="@+id/tvPercentChange24h"/>
     </LinearLayout>
 
-    <Switch
+    <CheckBox
+        android:id="@+id/star"
+        style="?android:attr/starStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_gravity="center_horizontal"
-        android:id="@+id/stcFavorite" />
+        android:layout_gravity="left"
+        />
 
 </LinearLayout>

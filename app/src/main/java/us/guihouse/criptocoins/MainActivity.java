@@ -5,8 +5,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import us.guihouse.criptocoins.adapters.CryptocoinAdapter;
 import us.guihouse.criptocoins.coinmarketcap_api.FetchTickerAsyncTask;
@@ -23,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
     private RepositoryManager repositoryManager;
 
     private FetchTickerAsyncTask asyncTaskHttp;
+    private TextView tvLastUpdateDate;
     private RecyclerView rvCryptocoins;
     private SwipeRefreshLayout srlRvCryptocoins;
     private CryptocoinAdapter adapter;
@@ -33,13 +39,14 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        tvLastUpdateDate = (TextView) findViewById(R.id.tvLastUpdateDate);
         rvCryptocoins = (RecyclerView) findViewById(R.id.rvCryptocoins);
         srlRvCryptocoins = (SwipeRefreshLayout) findViewById(R.id.srlRvCryptocoins);
 
 
         //Diz para a recyclerView que o tamanho do layout não irá mudar durante a execução.
         //Isso melhora a performance do app
-        rvCryptocoins.setHasFixedSize(true);
+        //rvCryptocoins.setHasFixedSize(false);
 
         //Define o layout manager, que irá consumir do adapter, conforme necessário
         mLayoutManager = new LinearLayoutManager(this);
@@ -103,5 +110,14 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
             this.adapter.updateData(cryptonsFeedList);
         }
         srlRvCryptocoins.setRefreshing(false);
+        this.updateLastUpdateDate(cryptonsFeedList.get(0).getLastUpdated());
+    }
+
+    private void updateLastUpdateDate(long timespan) {
+        SimpleDateFormat sdf = new SimpleDateFormat(" dd/MM/yyyy HH:mm:ss");
+        Calendar cal = new GregorianCalendar();
+
+        cal.setTimeInMillis(timespan * 1000);
+        tvLastUpdateDate.setText(sdf.format(cal.getTime()));
     }
 }
