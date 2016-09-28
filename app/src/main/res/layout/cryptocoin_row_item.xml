@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:paddingBottom="10dp"
     android:paddingTop="10dp"
@@ -13,53 +13,6 @@
         android:layout_marginLeft="16dp"
         android:id="@+id/ivCoinLogo"/>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/llNameInfo"
-        android:layout_marginLeft="10dp">
-        
-        <TextView
-            android:layout_width="100dp"
-            android:layout_height="wrap_content" 
-            android:id="@+id/tvCoinName"
-            android:layout_gravity="center_horizontal"
-            android:textStyle="bold"
-            android:lines="1"
-            android:ellipsize="end"
-            android:textSize="20dp"/>
-        
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tvCoinSymbol"
-            android:layout_gravity="center_horizontal"
-            android:textSize="18dp"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="center_vertical"
-        android:id="@+id/llPriceInfo"
-        android:layout_marginLeft="16dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tvPrice"
-            android:maxLength="9"
-            android:textSize="20dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/red_text"
-            android:layout_gravity="center_horizontal"
-            android:id="@+id/tvPercentChange24h"/>
-    </LinearLayout>
 
     <CheckBox
         android:id="@+id/star"
@@ -67,7 +20,66 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_gravity="left"
+        android:layout_alignParentRight="true"
         />
 
-</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/ivCoinLogo"
+        android:layout_toLeftOf="@id/star"
+        android:weightSum="3">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/llNameInfo"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="2">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvCoinName"
+                android:layout_gravity="center_horizontal"
+                android:textStyle="bold"
+                android:lines="1"
+                android:ellipsize="end"
+                android:textSize="20dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvCoinSymbol"
+                android:layout_gravity="center_horizontal"
+                android:textSize="18dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/llPriceInfo"
+            android:layout_weight="1"
+            android:layout_marginLeft="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvPrice"
+                android:maxLength="9"
+                android:textSize="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/red_text"
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/tvPercentChange24h"/>
+        </LinearLayout>
+    </LinearLayout>
+
+
+</RelativeLayout>
