@@ -20,7 +20,8 @@ public class CryptocoinsSQLiteOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL(this.getDataBaseUsersSQL());
+        sqLiteDatabase.execSQL(this.getDataBaseTableCryptocoins());
+        sqLiteDatabase.execSQL(this.getDataBaseTableFavorite());
     }
 
     @Override
@@ -28,7 +29,7 @@ public class CryptocoinsSQLiteOpenHelper extends SQLiteOpenHelper {
 
     }
 
-    private String getDataBaseUsersSQL() {
+    private String getDataBaseTableCryptocoins() {
         StringBuilder sqlString = new StringBuilder();
 
         sqlString.append("CREATE TABLE cryptocoins (");
@@ -50,10 +51,14 @@ public class CryptocoinsSQLiteOpenHelper extends SQLiteOpenHelper {
 
         sqlString.append("CREATE INDEX rank_index ON cryptocoins(rank);");
 
-        sqlString.append("CREATE TABLE favorite_cryptocoins (");
-        sqlString.append("id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,");
-        sqlString.append("id_cryptocoin INT NOT NULL,");
-        sqlString.append("FOREING KEY(id_cryptocoin) REFERENCES cryptocoins(id) );");
+        return sqlString.toString();
+    }
+    public String getDataBaseTableFavorite() {
+        StringBuilder sqlString = new StringBuilder();
+        sqlString.append("CREATE TABLE favorite_cryptocoins ( ");
+        sqlString.append("id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, ");
+        sqlString.append("id_cryptocoin INTEGER, ");
+        sqlString.append("FOREIGN KEY(id_cryptocoin) REFERENCES cryptocoins(id) );");
 
         return sqlString.toString();
     }

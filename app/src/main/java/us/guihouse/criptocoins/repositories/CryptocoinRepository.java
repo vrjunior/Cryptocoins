@@ -77,4 +77,48 @@ public class CryptocoinRepository {
         return result;
     }
 
+    private Integer selectIdPrimaryByStringId(String idString) {
+        StringBuilder sql = new StringBuilder();
+        Integer id = null;
+        String[] params = {idString};
+
+        sql.append("SELECT id ")
+                .append("FROM cryptocoins ")
+                .append("WHERE id_string = ?");
+
+        Cursor cursor = this.database.rawQuery(sql.toString(), params);
+        if(cursor != null) {
+            cursor.moveToFirst();
+            id =  new Integer(cursor.getInt(0));
+        }
+        cursor.close();
+
+        return id;
+    }
+
+    public boolean favoriteACryptocoin(String idString) {
+        Integer id = this.selectIdPrimaryByStringId(idString);
+
+        if(id == null) {
+            return false;
+        }
+        ContentValues content = new ContentValues();
+        content.put("id_cryptocoin", id.intValue());
+        this.database.insertWithOnConflict("favorite_cryptocoins", null, content, SQLiteDatabase.CONFLICT_ABORT);
+        return true;
+    }
+
+    public boolean unFavoriteACryptocoin(String idString) {
+        Integer id = this.selectIdPrimaryByStringId(idString);
+        StringBuilder whereClause = new StringBuilder();
+        if(id == null) {
+            return false;
+        }
+        whereClause.append("id_cryptocoin = " + id.intValue());
+
+        this.database.delete("favorite_cryptocoins", whereClause.toString(), null);
+
+        return true;
+    }
+
 }

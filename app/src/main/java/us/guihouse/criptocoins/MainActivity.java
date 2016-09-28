@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -22,7 +23,7 @@ import us.guihouse.criptocoins.repositories.RepositoryManager;
 import us.guihouse.criptocoins.repositories.RepositoryManagerCallback;
 import us.guihouse.criptocoins.repositories.SelectDataBaseCallback;
 
-public class MainActivity extends AppCompatActivity implements RepositoryManagerCallback, AsyncTaskHttpResult, SelectDataBaseCallback {
+public class MainActivity extends AppCompatActivity implements RepositoryManagerCallback, AsyncTaskHttpResult, SelectDataBaseCallback, onFavoriteClick {
 
 
     private RepositoryManager repositoryManager;
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
 
         //Diz para a recyclerView que o tamanho do layout não irá mudar durante a execução.
         //Isso melhora a performance do app
-        //rvCryptocoins.setHasFixedSize(false);
+        rvCryptocoins.setHasFixedSize(true);
 
         //Define o layout manager, que irá consumir do adapter, conforme necessário
         mLayoutManager = new LinearLayoutManager(this);
@@ -103,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
 
     private void setOrUpdateRecyclerView(ArrayList<CryptoCoin> cryptonsFeedList) {
         if(this.adapter == null) {
-            this.adapter = new CryptocoinAdapter(this, R.layout.cryptocoin_row_item, cryptonsFeedList);
+            this.adapter = new CryptocoinAdapter(this, this, cryptonsFeedList);
             this.rvCryptocoins.setAdapter(adapter);
         }
         else {
@@ -119,5 +120,15 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
 
         cal.setTimeInMillis(timespan * 1000);
         tvLastUpdateDate.setText(sdf.format(cal.getTime()));
+    }
+
+    @Override
+    public void favoriteCryptocoin(String idString) {
+        this.repositoryManager.getCryptocoinRepository().favoriteACryptocoin(idString);
+    }
+
+    @Override
+    public void unFavoriteCryptocoin(String idString) {
+        this.repositoryManager.getCryptocoinRepository().unFavoriteACryptocoin(idString);
     }
 }
