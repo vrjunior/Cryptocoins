@@ -107,12 +107,12 @@ public class CryptocoinAdapter extends RecyclerView.Adapter<CryptocoinAdapter.Cu
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             if(isChecked) {
-                this.clickCallback.unFavoriteCryptocoin(cryptocoinItens.get(this.getAdapterPosition()).getId());
-                buttonView.setChecked(false);
-            }
-            else {
                 this.clickCallback.favoriteCryptocoin(cryptocoinItens.get(this.getAdapterPosition()).getId());
                 buttonView.setChecked(true);
+            }
+            else {
+                this.clickCallback.unFavoriteCryptocoin(cryptocoinItens.get(this.getAdapterPosition()).getId());
+                buttonView.setChecked(false);
             }
         }
     }
