@@ -8,7 +8,7 @@ import android.os.AsyncTask;
  * Created by aluno on 14/09/16.
  */
 public class RepositoryManager {
-    private CryptocoinRepository cryptocoinRepository;
+    private TickerRepository tickerRepository;
 
     public RepositoryManager(final Context context, final RepositoryManagerCallback callback) {
         new AsyncTask<Void, Void, SQLiteDatabase>() {
@@ -21,13 +21,13 @@ public class RepositoryManager {
             @Override
             protected void onPostExecute(SQLiteDatabase database) {
                 super.onPostExecute(database);
-                cryptocoinRepository = new CryptocoinRepository(database);
+                tickerRepository = new TickerRepository(database);
                 callback.onManagerReady();
             }
         }.execute();
     }
 
-    public CryptocoinRepository getCryptocoinRepository() {
-        return cryptocoinRepository;
+    public TickerRepository getTickerRepository() {
+        return tickerRepository;
     }
 }

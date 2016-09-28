@@ -5,6 +5,6 @@ package us.guihouse.criptocoins;
  */
 
 public interface onFavoriteClick {
-    public void favoriteCryptocoin(String idString);
-    public void unFavoriteCryptocoin(String idString);
+    public void favoriteCryptocoin(Integer id);
+    public void unFavoriteCryptocoin(Integer id);
 }

@@ -18,22 +18,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import us.guihouse.criptocoins.R;
-import us.guihouse.criptocoins.models.CryptoCoin;
+import us.guihouse.criptocoins.models.Cryptocoin;
+import us.guihouse.criptocoins.models.Ticker;
 import us.guihouse.criptocoins.onFavoriteClick;
 
 /**
  * Created by valmir on 11/09/16.
  */
-public class CryptocoinAdapter extends RecyclerView.Adapter<CryptocoinAdapter.CustomViewHolder> {
+public class TickerAdapter extends RecyclerView.Adapter<TickerAdapter.CustomViewHolder> {
 
-    private List<CryptoCoin> cryptocoinItens;
+    private List<Ticker> tickerItens;
     private Context mContext;
     private onFavoriteClick clickCallback;
     public static final String COINS_LOGOS_FOLDER = "coins_logos/";
     public static final String POS_FIX_IMG_LOGOS = ".png";
 
-    public CryptocoinAdapter(Context context, onFavoriteClick clickCallback , List<CryptoCoin> objects) {
-        this.cryptocoinItens = objects;
+    public TickerAdapter(Context context, onFavoriteClick clickCallback , List<Ticker> objects) {
+        this.tickerItens = objects;
         this.mContext = context;
         this.clickCallback = clickCallback;
     }
@@ -49,36 +50,43 @@ public class CryptocoinAdapter extends RecyclerView.Adapter<CryptocoinAdapter.Cu
 
     @Override
     public void onBindViewHolder(CustomViewHolder holder, int position) {
-        CryptoCoin cryptoCoin = cryptocoinItens.get(position);
+        Ticker ticker = tickerItens.get(position);
+        Cryptocoin currentCryptocoin = ticker.getCryptocoin();
 
         InputStream ims;
         try {
-            ims = this.mContext.getAssets().open(COINS_LOGOS_FOLDER + cryptoCoin.getId() + POS_FIX_IMG_LOGOS);
+            ims = this.mContext.getAssets().open(COINS_LOGOS_FOLDER + currentCryptocoin.getIdString() + POS_FIX_IMG_LOGOS);
             Drawable d = Drawable.createFromStream(ims, null);
             holder.ivCoinLogo.setImageDrawable(d);
         }catch (IOException e) {} //Find the image in a fullhd screen if you can! HU3 HU3 BR
 
-        holder.tvCoinName.setText(cryptoCoin.getName());
-        holder.tvCoinSymbol.setText(cryptoCoin.getSymbol());
-        holder.tvPrice.setText(String.format("$%.6f", cryptoCoin.getPriceUsd()));
-        holder.tvPercentChange24h.setText(String.format("%.2f%%", cryptoCoin.getPercentChange24h()));
-        if(cryptoCoin.getPercentChange24h() >= 0) {
+        holder.tvCoinName.setText(currentCryptocoin.getName());
+        holder.tvCoinSymbol.setText(currentCryptocoin.getSymbol());
+        holder.tvPrice.setText(String.format("$%.6f", ticker.getPriceUsd()));
+        holder.tvPercentChange24h.setText(String.format("%.2f%%", ticker.getPercentChange24h()));
+        if(ticker.getPercentChange24h() >= 0) {
             holder.tvPercentChange24h.setTextColor(ContextCompat.getColor(mContext, R.color.green_text));
         }
         else {
             holder.tvPercentChange24h.setTextColor(ContextCompat.getColor(mContext, R.color.red_text)); // Como as views são recicladas, é necessário esse else!
+        }
+        if(currentCryptocoin.getIsFavorite()) {
+            holder.cbFavorite.setChecked(true);
+        }
+        else {
+            holder.cbFavorite.setChecked(false);
         }
 
     }
 
     @Override
     public int getItemCount() {
-        return (null != cryptocoinItens ? cryptocoinItens.size() : 0); //ternária que devolve o tamanho se o arrayList não for nulo e zero se for
+        return (null != tickerItens ? tickerItens.size() : 0); //ternária que devolve o tamanho se o arrayList não for nulo e zero se for
     }
 
-    public void updateData(ArrayList<CryptoCoin> newData) {
-        cryptocoinItens.clear();
-        cryptocoinItens.addAll(newData);
+    public void updateData(ArrayList<Ticker> newData) {
+        tickerItens.clear();
+        tickerItens.addAll(newData);
         notifyDataSetChanged();
     }
 
@@ -107,11 +115,11 @@ public class CryptocoinAdapter extends RecyclerView.Adapter<CryptocoinAdapter.Cu
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             if(isChecked) {
-                this.clickCallback.favoriteCryptocoin(cryptocoinItens.get(this.getAdapterPosition()).getId());
+                this.clickCallback.favoriteCryptocoin(tickerItens.get(this.getAdapterPosition()).getCryptocoin().getId());
                 buttonView.setChecked(true);
             }
             else {
-                this.clickCallback.unFavoriteCryptocoin(cryptocoinItens.get(this.getAdapterPosition()).getId());
+                this.clickCallback.unFavoriteCryptocoin(tickerItens.get(this.getAdapterPosition()).getCryptocoin().getId());
                 buttonView.setChecked(false);
             }
         }

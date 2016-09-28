@@ -5,19 +5,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
-import us.guihouse.criptocoins.adapters.CryptocoinAdapter;
+import us.guihouse.criptocoins.adapters.TickerAdapter;
 import us.guihouse.criptocoins.coinmarketcap_api.FetchTickerAsyncTask;
 import us.guihouse.criptocoins.coinmarketcap_api.AsyncTaskHttpResult;
-import us.guihouse.criptocoins.models.CryptoCoin;
+import us.guihouse.criptocoins.models.Ticker;
 import us.guihouse.criptocoins.repositories.AsyncTaskSelectDatabase;
 import us.guihouse.criptocoins.repositories.RepositoryManager;
 import us.guihouse.criptocoins.repositories.RepositoryManagerCallback;
@@ -32,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
     private TextView tvLastUpdateDate;
     private RecyclerView rvCryptocoins;
     private SwipeRefreshLayout srlRvCryptocoins;
-    private CryptocoinAdapter adapter;
+    private TickerAdapter adapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
@@ -70,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
     }
 
     private void doRequest() {
-        asyncTaskHttp = new FetchTickerAsyncTask(this, repositoryManager.getCryptocoinRepository());
+        asyncTaskHttp = new FetchTickerAsyncTask(this, repositoryManager.getTickerRepository());
         asyncTaskHttp.execute();
     }
 
@@ -93,25 +91,25 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
 
 
     //CALLBACK DO SELECT DO SQLITE
-    public void onSelectResult(ArrayList<CryptoCoin> result) {
+    public void onSelectResult(ArrayList<Ticker> result) {
         this.setOrUpdateRecyclerView(result);
     }
 
     private void selectDataToShow() {
-        AsyncTaskSelectDatabase asyncTaskSelect = new AsyncTaskSelectDatabase(this, this.repositoryManager.getCryptocoinRepository());
+        AsyncTaskSelectDatabase asyncTaskSelect = new AsyncTaskSelectDatabase(this, this.repositoryManager.getTickerRepository());
         asyncTaskSelect.execute();
     }
 
-    private void setOrUpdateRecyclerView(ArrayList<CryptoCoin> cryptonsFeedList) {
+    private void setOrUpdateRecyclerView(ArrayList<Ticker> tickersFeedList) {
         if(this.adapter == null) {
-            this.adapter = new CryptocoinAdapter(this, this, cryptonsFeedList);
+            this.adapter = new TickerAdapter(this, this, tickersFeedList);
             this.rvCryptocoins.setAdapter(adapter);
         }
         else {
-            this.adapter.updateData(cryptonsFeedList);
+            this.adapter.updateData(tickersFeedList);
         }
         srlRvCryptocoins.setRefreshing(false);
-        this.updateLastUpdateDate(cryptonsFeedList.get(0).getLastUpdated());
+        this.updateLastUpdateDate(tickersFeedList.get(0).getLastUpdated());
     }
 
     private void updateLastUpdateDate(long timespan) {
@@ -123,12 +121,12 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
     }
 
     @Override
-    public void favoriteCryptocoin(String idString) {
-        this.repositoryManager.getCryptocoinRepository().favoriteACryptocoin(idString);
+    public void favoriteCryptocoin(Integer id) {
+        this.repositoryManager.getTickerRepository().favoriteACryptocoin(id);
     }
 
     @Override
-    public void unFavoriteCryptocoin(String idString) {
-        this.repositoryManager.getCryptocoinRepository().unFavoriteACryptocoin(idString);
+    public void unFavoriteCryptocoin(Integer id) {
+        this.repositoryManager.getTickerRepository().unFavoriteACryptocoin(id);
     }
 }

@@ -21,7 +21,7 @@ public class CryptocoinsSQLiteOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(this.getDataBaseTableCryptocoins());
-        sqLiteDatabase.execSQL(this.getDataBaseTableFavorite());
+        sqLiteDatabase.execSQL(this.getDataBaseTableTicker());
     }
 
     @Override
@@ -36,7 +36,17 @@ public class CryptocoinsSQLiteOpenHelper extends SQLiteOpenHelper {
         sqlString.append("id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,");
         sqlString.append("id_string CHAR(100) NOT NULL UNIQUE,");
         sqlString.append("name CHAR(360) NOT NULL,");
-        sqlString.append("symbol CHAR(16) NOT NULL,");
+        sqlString.append("symbol CHAR(16) NOT NULL, ");
+        sqlString.append("favorite INTEGER DEFAULT 0 );");
+
+
+        return sqlString.toString();
+    }
+    public String getDataBaseTableTicker() {
+        StringBuilder sqlString = new StringBuilder();
+        sqlString.append("CREATE TABLE tickers ( ");
+        sqlString.append("id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, ");
+        sqlString.append("id_cryptocoin INTEGER UNIQUE, ");
         sqlString.append("rank INTEGER NOT NULL,");
         sqlString.append("price_usd REAL NOT NULL,");
         sqlString.append("price_btc REAL NOT NULL,");
@@ -47,17 +57,7 @@ public class CryptocoinsSQLiteOpenHelper extends SQLiteOpenHelper {
         sqlString.append("percent_change_1h REAL NOT NULL,");
         sqlString.append("percent_change_24h REAL NOT NULL,");
         sqlString.append("percent_change_7d REAL NOT NULL,");
-        sqlString.append("last_update_timestamp BIGINT NOT NULL);");
-
-        sqlString.append("CREATE INDEX rank_index ON cryptocoins(rank);");
-
-        return sqlString.toString();
-    }
-    public String getDataBaseTableFavorite() {
-        StringBuilder sqlString = new StringBuilder();
-        sqlString.append("CREATE TABLE favorite_cryptocoins ( ");
-        sqlString.append("id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, ");
-        sqlString.append("id_cryptocoin INTEGER, ");
+        sqlString.append("last_update_timestamp BIGINT NOT NULL,");
         sqlString.append("FOREIGN KEY(id_cryptocoin) REFERENCES cryptocoins(id) );");
 
         return sqlString.toString();

@@ -8,8 +8,8 @@ import org.json.JSONException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 
-import us.guihouse.criptocoins.models.CryptoCoin;
-import us.guihouse.criptocoins.repositories.CryptocoinRepository;
+import us.guihouse.criptocoins.models.Ticker;
+import us.guihouse.criptocoins.repositories.TickerRepository;
 
 /**
  * Created by valmir.massoni on 09/09/2016.
@@ -19,11 +19,11 @@ public class FetchTickerAsyncTask extends AsyncTask<Void, Void, Void> {
     private static final String URLREQUEST = "https://api.coinmarketcap.com/v1/ticker";
 
     private AsyncTaskHttpResult callback;
-    private CryptocoinRepository cryptoconRepository;
+    private TickerRepository tickerRepository;
 
-    public FetchTickerAsyncTask(AsyncTaskHttpResult callback, CryptocoinRepository cryptocoinRepository) {
+    public FetchTickerAsyncTask(AsyncTaskHttpResult callback, TickerRepository tickerRepository) {
         this.callback = callback;
-        this.cryptoconRepository = cryptocoinRepository;
+        this.tickerRepository = tickerRepository;
     }
 
     @Override
@@ -37,10 +37,10 @@ public class FetchTickerAsyncTask extends AsyncTask<Void, Void, Void> {
             RequestHttp requestHttp = new RequestHttp(URLREQUEST);
             String rawData = requestHttp.executeRequest();
             CryptoCoinParser parser = new CryptoCoinParser(rawData);
-            ArrayList<CryptoCoin> result = parser.getCryptoCoinArrayList();
+            ArrayList<Ticker> result = parser.getTickerArrayList();
 
             //insert or update db
-            this.cryptoconRepository.insertOrUpdateCryptocoins(result);
+            this.tickerRepository.insertOrUpdateTicker(result);
 
         } catch (MalformedURLException e) {
             // Unexpected. The url is hard-coded

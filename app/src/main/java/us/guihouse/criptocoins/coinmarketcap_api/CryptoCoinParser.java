@@ -5,9 +5,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
-import us.guihouse.criptocoins.models.CryptoCoin;
+import us.guihouse.criptocoins.models.Cryptocoin;
+import us.guihouse.criptocoins.models.Ticker;
 
 /**
  * Created by valmir on 10/09/16.
@@ -19,9 +19,10 @@ public class CryptoCoinParser {
         jsonArray = new JSONArray(rawData);
     }
 
-    public ArrayList<CryptoCoin> getCryptoCoinArrayList() throws JSONException {
-        ArrayList<CryptoCoin> result = new ArrayList<>();
-        CryptoCoin currentCryptoCoin;
+    public ArrayList<Ticker> getTickerArrayList() throws JSONException {
+        ArrayList<Ticker> result = new ArrayList<>();
+        Cryptocoin currentCryptocoin;
+        Ticker currentTicker;
         JSONObject JSONObj;
 
         Double volumeUsd24hours; //Eu sei que isso é porco, mas depois a gente optimiza
@@ -75,10 +76,10 @@ public class CryptoCoinParser {
             }
 
 
-            currentCryptoCoin = new CryptoCoin( JSONObj.getString("id"),
-                    JSONObj.getString("name"),
-                    JSONObj.getString("symbol"),
-                    JSONObj.getInt("rank"),
+            currentCryptocoin = new Cryptocoin( null, JSONObj.getString("id"), JSONObj.getString("name"),
+                    JSONObj.getString("symbol"));
+
+            currentTicker = new Ticker(currentCryptocoin, JSONObj.getInt("rank"),
                     JSONObj.getDouble("price_usd"),
                     JSONObj.getDouble("price_btc"),
                     volumeUsd24hours,
@@ -90,7 +91,7 @@ public class CryptoCoinParser {
                     percentChange7d,
                     JSONObj.getLong("last_updated") );
 
-            result.add(currentCryptoCoin);
+            result.add(currentTicker);
         }
         return result;
     }
