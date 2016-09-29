@@ -1,5 +1,6 @@
 package us.guihouse.criptocoins;
 
+import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,7 +22,7 @@ import us.guihouse.criptocoins.repositories.RepositoryManager;
 import us.guihouse.criptocoins.repositories.RepositoryManagerCallback;
 import us.guihouse.criptocoins.repositories.SelectDataBaseCallback;
 
-public class MainActivity extends AppCompatActivity implements RepositoryManagerCallback, AsyncTaskHttpResult, SelectDataBaseCallback, onFavoriteClick {
+public class MainActivity extends AppCompatActivity implements RepositoryManagerCallback, AsyncTaskHttpResult, SelectDataBaseCallback, onRowClick {
 
 
     private RepositoryManager repositoryManager;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
     private SwipeRefreshLayout srlRvCryptocoins;
     private TickerAdapter adapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    public static String EXTRA_ID_CRYPTOCOIN = "idCryptocoin";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +53,8 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
         mLayoutManager = new LinearLayoutManager(this);
         rvCryptocoins.setLayoutManager(mLayoutManager);
 
-        repositoryManager = new RepositoryManager(this, this);
         srlRvCryptocoins.setRefreshing(true);
+        repositoryManager = new RepositoryManager(this, this);
 
         srlRvCryptocoins.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -128,5 +130,12 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
     @Override
     public void unFavoriteCryptocoin(Integer id) {
         this.repositoryManager.getTickerRepository().unFavoriteACryptocoin(id);
+    }
+
+    @Override
+    public void onRowClick(Integer id) {
+        Intent openDetailsActivity = new Intent(MainActivity.this, DetailsActivity.class);
+        openDetailsActivity.putExtra(EXTRA_ID_CRYPTOCOIN, id);
+        this.startActivity(openDetailsActivity);
     }
 }

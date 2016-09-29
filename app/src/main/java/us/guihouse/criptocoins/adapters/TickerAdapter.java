@@ -20,7 +20,7 @@ import java.util.List;
 import us.guihouse.criptocoins.R;
 import us.guihouse.criptocoins.models.Cryptocoin;
 import us.guihouse.criptocoins.models.Ticker;
-import us.guihouse.criptocoins.onFavoriteClick;
+import us.guihouse.criptocoins.onRowClick;
 
 /**
  * Created by valmir on 11/09/16.
@@ -29,11 +29,11 @@ public class TickerAdapter extends RecyclerView.Adapter<TickerAdapter.CustomView
 
     private List<Ticker> tickerItens;
     private Context mContext;
-    private onFavoriteClick clickCallback;
+    private onRowClick clickCallback;
     public static final String COINS_LOGOS_FOLDER = "coins_logos/";
     public static final String POS_FIX_IMG_LOGOS = ".png";
 
-    public TickerAdapter(Context context, onFavoriteClick clickCallback , List<Ticker> objects) {
+    public TickerAdapter(Context context, onRowClick clickCallback , List<Ticker> objects) {
         this.tickerItens = objects;
         this.mContext = context;
         this.clickCallback = clickCallback;
@@ -91,16 +91,16 @@ public class TickerAdapter extends RecyclerView.Adapter<TickerAdapter.CustomView
     }
 
 
-    public class CustomViewHolder extends RecyclerView.ViewHolder implements CheckBox.OnCheckedChangeListener {
+    public class CustomViewHolder extends RecyclerView.ViewHolder implements CheckBox.OnCheckedChangeListener , View.OnClickListener{
         protected ImageView ivCoinLogo;
         protected TextView tvCoinName;
         protected TextView tvCoinSymbol;
         protected TextView tvPrice;
         protected TextView tvPercentChange24h;
         protected CheckBox cbFavorite;
-        private onFavoriteClick clickCallback;
+        private onRowClick clickCallback;
 
-        public CustomViewHolder(View v, onFavoriteClick clickCallback) {
+        public CustomViewHolder(View v, onRowClick clickCallback) {
             super(v);
             ivCoinLogo = (ImageView) v.findViewById(R.id.ivCoinLogo);
             tvCoinName = (TextView) v.findViewById(R.id.tvCoinName);
@@ -109,6 +109,8 @@ public class TickerAdapter extends RecyclerView.Adapter<TickerAdapter.CustomView
             tvPercentChange24h = (TextView) v.findViewById(R.id.tvPercentChange24h);
             cbFavorite = (CheckBox) v.findViewById(R.id.cbFavorite);
             this.clickCallback = clickCallback;
+
+            v.setOnClickListener(this);
             cbFavorite.setOnCheckedChangeListener(this);
         }
 
@@ -122,6 +124,11 @@ public class TickerAdapter extends RecyclerView.Adapter<TickerAdapter.CustomView
                 this.clickCallback.unFavoriteCryptocoin(tickerItens.get(this.getAdapterPosition()).getCryptocoin().getId());
                 buttonView.setChecked(false);
             }
+        }
+
+        @Override
+        public void onClick(View v) {
+            this.clickCallback.onRowClick(tickerItens.get(this.getAdapterPosition()).getCryptocoin().getId());
         }
     }
 }

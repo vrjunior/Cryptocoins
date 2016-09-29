@@ -28,6 +28,6 @@ public class RepositoryManager {
     }
 
     public TickerRepository getTickerRepository() {
-        return tickerRepository;
+        return this.tickerRepository;
     }
 }
