@@ -14,7 +14,6 @@ import us.guihouse.criptocoins.models.Ticker;
  */
 public class TickerRepository {
     private SQLiteDatabase database;
-    ContentValues content;
     public static final int FAVORITE_TRUE = 1;
     public static final int FAVORITE_FALSE = 0;
     public static final String CRYPTOCOINS_TABLE = "cryptocoins";
@@ -22,10 +21,11 @@ public class TickerRepository {
 
     public TickerRepository(SQLiteDatabase database) {
         this.database = database;
-        this.content = new ContentValues();
     }
 
     private void insertCryptocoinIfNotExists(Cryptocoin cc) {
+        ContentValues content = new ContentValues();
+
         content.put("id_string", cc.getIdString());
         content.put("name", cc.getName());
         content.put("symbol", cc.getSymbol());
@@ -50,6 +50,7 @@ public class TickerRepository {
     }
 
     public void insertOrUpdateTicker(ArrayList<Ticker> tickers) {
+        ContentValues content = new ContentValues();
         Integer id;
         database.beginTransaction();
         try {
@@ -162,6 +163,7 @@ public class TickerRepository {
     }
 
     public boolean unFavoriteACryptocoin(Integer id) {
+        ContentValues content = new ContentValues();
         if(id == null) {
             return false;
         }
