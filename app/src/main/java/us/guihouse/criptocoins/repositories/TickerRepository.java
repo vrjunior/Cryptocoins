@@ -3,6 +3,7 @@ package us.guihouse.criptocoins.repositories;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -101,6 +102,7 @@ public class TickerRepository {
         boolean currentFavorite;
         if(cursor != null) {
             if(cursor.moveToFirst()) {
+                Log.d("select", "comecou");
                 do {
                     currentFavorite = cursor.getInt(15) == 0 ? false : true;
                     cc = new Cryptocoin(cursor.getInt(11),cursor.getString(12), cursor.getString(13), cursor.getString(14));
@@ -113,6 +115,7 @@ public class TickerRepository {
 
                     result.add(currentTicker);
                 } while (cursor.moveToNext());
+                Log.d("select", "terminou");
             }
         }
         cursor.close();

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -53,15 +54,19 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
         mLayoutManager = new LinearLayoutManager(this);
         rvCryptocoins.setLayoutManager(mLayoutManager);
 
-        srlRvCryptocoins.setRefreshing(true);
+        this.adapter = new TickerAdapter(this, this);
+        this.rvCryptocoins.setAdapter(adapter);
+
         repositoryManager = new RepositoryManager(this, this);
 
+        srlRvCryptocoins.setRefreshing(true);
         srlRvCryptocoins.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 doRequest();
             }
         });
+
     }
 
     @Override
@@ -81,16 +86,15 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
 
     @Override
     public void onFetchConnectionError() {
-        //Toast.makeText(this, "Erro de conexão!", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Erro de conexão!", Toast.LENGTH_LONG).show();
         this.selectDataToShow();
     }
 
     @Override
     public void onServerError() {
-        //Toast.makeText(this, "Não foi possível atualizar os dados!", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Não foi possível atualizar os dados!", Toast.LENGTH_LONG).show();
         this.selectDataToShow();
     }
-
 
     //CALLBACK DO SELECT DO SQLITE
     public void onSelectResult(ArrayList<Ticker> result) {
@@ -103,13 +107,7 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
     }
 
     private void setOrUpdateRecyclerView(ArrayList<Ticker> tickersFeedList) {
-        if(this.adapter == null) {
-            this.adapter = new TickerAdapter(this, this, tickersFeedList);
-            this.rvCryptocoins.setAdapter(adapter);
-        }
-        else {
-            this.adapter.updateData(tickersFeedList);
-        }
+        this.adapter.setTickers(tickersFeedList);
         srlRvCryptocoins.setRefreshing(false);
         this.updateLastUpdateDate(tickersFeedList.get(0).getLastUpdated());
     }

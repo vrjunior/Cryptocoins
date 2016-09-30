@@ -33,8 +33,7 @@ public class TickerAdapter extends RecyclerView.Adapter<TickerAdapter.CustomView
     public static final String COINS_LOGOS_FOLDER = "coins_logos/";
     public static final String POS_FIX_IMG_LOGOS = ".png";
 
-    public TickerAdapter(Context context, onRowClick clickCallback , List<Ticker> objects) {
-        this.tickerItens = objects;
+    public TickerAdapter(Context context, onRowClick clickCallback ) {
         this.mContext = context;
         this.clickCallback = clickCallback;
     }
@@ -84,9 +83,8 @@ public class TickerAdapter extends RecyclerView.Adapter<TickerAdapter.CustomView
         return (null != tickerItens ? tickerItens.size() : 0); //ternária que devolve o tamanho se o arrayList não for nulo e zero se for
     }
 
-    public void updateData(ArrayList<Ticker> newData) {
-        tickerItens.clear();
-        tickerItens.addAll(newData);
+    public void setTickers(ArrayList<Ticker> newData) {
+        this.tickerItens = newData;
         notifyDataSetChanged();
     }
 

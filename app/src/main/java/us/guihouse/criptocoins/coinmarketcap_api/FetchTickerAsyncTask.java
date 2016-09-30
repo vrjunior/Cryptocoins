@@ -20,6 +20,7 @@ public class FetchTickerAsyncTask extends AsyncTask<Void, Void, Void> {
 
     private AsyncTaskHttpResult callback;
     private TickerRepository tickerRepository;
+    private Exception executionError;
 
     public FetchTickerAsyncTask(AsyncTaskHttpResult callback, TickerRepository tickerRepository) {
         this.callback = callback;
@@ -46,14 +47,14 @@ public class FetchTickerAsyncTask extends AsyncTask<Void, Void, Void> {
             // Unexpected. The url is hard-coded
             Log.e(TAG, e.getMessage(), e);
         } catch (RequestHttp.NoConnection ex) {
-            callback.onFetchConnectionError();
+            executionError = ex;
         } catch (RequestHttp.RequestFail requestFail) {
             Log.e(TAG, requestFail.getMessage(), requestFail);
-            callback.onServerError();
+            executionError = requestFail;
         } catch (JSONException e) {
-             //Error to create JSONArray or json hash does not exist
+            // Error to create JSONArray or json hash does not exist
             Log.e(TAG, e.getMessage(), e);
-            callback.onServerError();
+            executionError = e;
         }
 
         return null;
@@ -61,7 +62,16 @@ public class FetchTickerAsyncTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected void onPostExecute(Void aVoid) {
-        callback.onFetchSuccess();
+        if (executionError == null) {
+            callback.onFetchSuccess();
+        } else if (executionError instanceof RequestHttp.NoConnection) {
+            callback.onFetchConnectionError();
+        } else if (executionError instanceof RequestHttp.RequestFail) {
+            callback.onServerError();
+        } else if (executionError instanceof JSONException) {
+            callback.onServerError();
+        }
+
         super.onPostExecute(aVoid);
     }
 }
