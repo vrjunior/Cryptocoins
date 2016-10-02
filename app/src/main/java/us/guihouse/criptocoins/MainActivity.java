@@ -1,6 +1,8 @@
 package us.guihouse.criptocoins;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,7 +28,6 @@ import us.guihouse.criptocoins.repositories.SelectDataBaseCallback;
 
 public class MainActivity extends AppCompatActivity implements RepositoryManagerCallback, AsyncTaskHttpResult, SelectDataBaseCallback, onRowClick {
 
-
     private RepositoryManager repositoryManager;
 
     private FetchTickerAsyncTask asyncTaskHttp;
@@ -36,6 +37,9 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
     private TickerAdapter adapter;
     private RecyclerView.LayoutManager mLayoutManager;
     public static String EXTRA_ID_CRYPTOCOIN = "idCryptocoin";
+    public static String SHARED_PREFERENCE_FILE = "us.guihouse.cryptocoins.lastUpdatePreference";
+    public static String SHARED_PREFERENCE_LAST_UPDATE = "lastUpdate";
+    private SharedPreferences sharedPrefe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
         tvLastUpdateDate = (TextView) findViewById(R.id.tvLastUpdateDate);
         rvCryptocoins = (RecyclerView) findViewById(R.id.rvCryptocoins);
         srlRvCryptocoins = (SwipeRefreshLayout) findViewById(R.id.srlRvCryptocoins);
+        sharedPrefe = getSharedPreferences(SHARED_PREFERENCE_FILE, MODE_PRIVATE);
 
 
         //Diz para a recyclerView que o tamanho do layout não irá mudar durante a execução.
@@ -83,6 +88,9 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
     @Override
     public void onFetchSuccess() {
         this.selectDataToShow();
+        SharedPreferences.Editor editor = sharedPrefe.edit();
+        editor.putLong(SHARED_PREFERENCE_LAST_UPDATE, System.currentTimeMillis());
+        editor.commit();
     }
 
     @Override
@@ -115,10 +123,10 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
 
     private void updateLastUpdateDate(long timespan) {
         SimpleDateFormat sdf = new SimpleDateFormat(" dd/MM/yyyy HH:mm:ss");
-        Calendar cal = new GregorianCalendar();
-
-        cal.setTimeInMillis(timespan * 1000);
-        tvLastUpdateDate.setText(sdf.format(cal.getTime()));
+        Calendar calendar = new GregorianCalendar();
+        long time = sharedPrefe.getLong(SHARED_PREFERENCE_LAST_UPDATE, 0);
+        calendar.setTimeInMillis(time);
+        tvLastUpdateDate.setText(sdf.format(calendar.getTime()));
     }
 
     @Override
