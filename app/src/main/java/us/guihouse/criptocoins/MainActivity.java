@@ -18,6 +18,7 @@ import us.guihouse.criptocoins.adapters.TickerAdapter;
 import us.guihouse.criptocoins.coinmarketcap_api.FetchTickerAsyncTask;
 import us.guihouse.criptocoins.coinmarketcap_api.AsyncTaskHttpResult;
 import us.guihouse.criptocoins.models.Ticker;
+import us.guihouse.criptocoins.repositories.AsyncTaskFavorite;
 import us.guihouse.criptocoins.repositories.AsyncTaskSelectDatabase;
 import us.guihouse.criptocoins.repositories.RepositoryManager;
 import us.guihouse.criptocoins.repositories.RepositoryManagerCallback;
@@ -122,12 +123,14 @@ public class MainActivity extends AppCompatActivity implements RepositoryManager
 
     @Override
     public void favoriteCryptocoin(Integer id) {
-        this.repositoryManager.getTickerRepository().favoriteACryptocoin(id);
+        AsyncTaskFavorite asyncTaskFavorite = new AsyncTaskFavorite(this.repositoryManager.getTickerRepository(), id, true);
+        this.adapter.setCheckedStar(id);
     }
 
     @Override
     public void unFavoriteCryptocoin(Integer id) {
         this.repositoryManager.getTickerRepository().unFavoriteACryptocoin(id);
+        this.adapter.setUncheckedStar(id);
     }
 
     @Override

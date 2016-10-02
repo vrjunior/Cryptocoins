@@ -88,6 +88,27 @@ public class TickerAdapter extends RecyclerView.Adapter<TickerAdapter.CustomView
         notifyDataSetChanged();
     }
 
+    private int getPositionOnAdapterById(Integer id) {
+        int index = 0;
+        for(Ticker t : this.tickerItens) {
+            if(t.getCryptocoin().getId().equals(id)) {
+                return index;
+            }
+            index++;
+        }
+        return -1;
+    }
+
+    public void setCheckedStar(Integer id){
+        int pos = this.getPositionOnAdapterById(id);
+        this.tickerItens.get(pos).getCryptocoin().setIsFavorite(true);
+    }
+
+    public void setUncheckedStar(Integer id){
+        int pos = this.getPositionOnAdapterById(id);
+        this.tickerItens.get(pos).getCryptocoin().setIsFavorite(false);
+    }
+
 
     public class CustomViewHolder extends RecyclerView.ViewHolder implements CheckBox.OnCheckedChangeListener , View.OnClickListener{
         protected ImageView ivCoinLogo;
