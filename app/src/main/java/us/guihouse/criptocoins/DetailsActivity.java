@@ -62,7 +62,7 @@ public class DetailsActivity extends AppCompatActivity  implements RepositoryMan
             tvCoinName.setText(this.ticker.getCryptocoin().getName());
             tvCoinSymbol.setText(this.ticker.getCryptocoin().getSymbol());
             tvPriceUsd.setText(String.format("$%.6f USD", this.ticker.getPriceUsd()));
-            tvPriceBtc.setText(String.format("%.2f BTC", this.ticker.getPriceBtc()));
+            tvPriceBtc.setText(String.format("%.6f BTC", this.ticker.getPriceBtc()));
             tvMarketCapUsd.setText(String.format("$%.2f", this.ticker.getMarketCapUsd()));
         }
     }

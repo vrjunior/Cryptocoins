@@ -9,7 +9,7 @@
     <ImageView
         android:layout_width="26dp"
         android:layout_height="26dp"
-        android:layout_gravity="center_vertical"
+        android:layout_centerVertical="true"
         android:layout_marginLeft="16dp"
         android:id="@+id/ivCoinLogo"/>
 
@@ -53,6 +53,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/tvCoinSymbol"
+                android:lines="1"
+                android:ellipsize="end"
                 android:textSize="18dp"/>
         </LinearLayout>
 
