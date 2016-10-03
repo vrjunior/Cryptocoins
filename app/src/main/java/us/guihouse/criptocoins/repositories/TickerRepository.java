@@ -123,6 +123,46 @@ public class TickerRepository {
         return result;
     }
 
+    public ArrayList<Ticker> getAllFavoriteTickers() {
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT rank, price_usd, price_btc, volume_usd_24h, ")
+                .append("market_cap_usd, available_supply, total_supply, percent_change_1h, percent_change_24h, percent_change_7d, ")
+                .append("last_update_timestamp, cryptocoins.id, cryptocoins.id_string, cryptocoins.name, cryptocoins.symbol, ")
+                .append("cryptocoins.favorite ")
+                .append("FROM tickers ")
+                .append("INNER JOIN cryptocoins ")
+                .append("ON tickers.id_cryptocoin = cryptocoins.id ")
+                .append("WHERE cryptocoins.favorite = 1 ")
+                .append("ORDER BY rank ");
+
+        Cursor cursor = database.rawQuery(sql.toString(), null);
+
+        ArrayList<Ticker> result = new ArrayList<>();
+        Cryptocoin cc;
+        Ticker currentTicker;
+        boolean currentFavorite;
+        if(cursor != null) {
+            if(cursor.moveToFirst()) {
+                Log.d("select", "comecou");
+                do {
+                    currentFavorite = cursor.getInt(15) == 0 ? false : true;
+                    cc = new Cryptocoin(cursor.getInt(11),cursor.getString(12), cursor.getString(13), cursor.getString(14));
+                    cc.setIsFavorite(currentFavorite);
+
+                    currentTicker = new Ticker(cc , cursor.getInt(0), cursor.getDouble(1), cursor.getDouble(2),
+                            cursor.getDouble(3), cursor.getDouble(4), cursor.getDouble(5),
+                            cursor.getDouble(6), cursor.getDouble(7), cursor.getDouble(8),
+                            cursor.getDouble(9), cursor.getLong(10));
+
+                    result.add(currentTicker);
+                } while (cursor.moveToNext());
+                Log.d("select", "terminou");
+            }
+        }
+        cursor.close();
+        return result;
+    }
+
     public Ticker getTickerByCryptocoinId(Integer id) {
         Ticker result = null;
         Cryptocoin cc;

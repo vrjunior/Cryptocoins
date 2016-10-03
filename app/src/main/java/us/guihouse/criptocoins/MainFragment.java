@@ -1,8 +1,10 @@
 package us.guihouse.criptocoins;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -43,6 +45,15 @@ public class MainFragment extends Fragment implements RepositoryManagerCallback,
 
     public MainFragment() {
         // Required empty public constructor
+    }
+
+    public static MainFragment newInstance(int page, String title) {
+        MainFragment mainFragment = new MainFragment();
+        Bundle args = new Bundle();
+        args.putInt("someInt", page);
+        args.putString(Resources.getSystem().getString(R.string.fragmentMainTitle), title);
+        mainFragment.setArguments(args);
+        return mainFragment;
     }
 
     @Override
@@ -131,7 +142,7 @@ public class MainFragment extends Fragment implements RepositoryManagerCallback,
     }
 
     private void selectDataToShow() {
-        AsyncTaskSelectDatabase asyncTaskSelect = new AsyncTaskSelectDatabase(this, this.repositoryManager.getTickerRepository());
+        AsyncTaskSelectDatabase asyncTaskSelect = new AsyncTaskSelectDatabase(this, this.repositoryManager.getTickerRepository(), false);
         asyncTaskSelect.execute();
     }
 

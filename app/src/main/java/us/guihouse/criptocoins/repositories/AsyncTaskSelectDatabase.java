@@ -15,10 +15,12 @@ public class AsyncTaskSelectDatabase extends AsyncTask <Void, ArrayList<Ticker>,
 
     private SelectDataBaseCallback instance;
     private TickerRepository tickerRepository;
+    private boolean flag;
 
-    public AsyncTaskSelectDatabase(SelectDataBaseCallback instance, TickerRepository tickerRepository) {
+    public AsyncTaskSelectDatabase(SelectDataBaseCallback instance, TickerRepository tickerRepository, boolean flag) {
         this.instance = instance;
         this.tickerRepository = tickerRepository;
+        this.flag = flag;
     }
 
     @Override
@@ -28,7 +30,13 @@ public class AsyncTaskSelectDatabase extends AsyncTask <Void, ArrayList<Ticker>,
 
     @Override
     protected ArrayList<Ticker> doInBackground(Void... params) {
-        ArrayList<Ticker> result = tickerRepository.getAllTickers();
+        ArrayList<Ticker> result;
+        if(flag) {
+            result = tickerRepository.getAllFavoriteTickers();
+        }
+        else {
+            result = tickerRepository.getAllTickers();
+        }
 
         return result;
     }

@@ -2,7 +2,11 @@ package us.guihouse.criptocoins;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import us.guihouse.criptocoins.adapters.FragmentPagerAdapter;
 import us.guihouse.criptocoins.adapters.TickerAdapter;
 import us.guihouse.criptocoins.coinmarketcap_api.FetchTickerAsyncTask;
 import us.guihouse.criptocoins.coinmarketcap_api.AsyncTaskHttpResult;
@@ -33,6 +38,7 @@ public class MainActivity extends FragmentActivity {
     public static String SHARED_PREFERENCE_FILE = "us.guihouse.cryptocoins.lastUpdatePreference";
     public static String SHARED_PREFERENCE_LAST_UPDATE = "lastUpdate";
     private SharedPreferences sharedPrefe;
+    private FragmentPagerAdapter adapterViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +47,9 @@ public class MainActivity extends FragmentActivity {
 
         tvLastUpdateDate = (TextView) this.findViewById(R.id.tvLastUpdateDate);
         sharedPrefe = getSharedPreferences(SHARED_PREFERENCE_FILE, MODE_PRIVATE);
+        ViewPager vpPager = (ViewPager) findViewById(R.id.vpPager);
+        adapterViewPager = new FragmentPagerAdapter(getSupportFragmentManager());
+        vpPager.setAdapter(adapterViewPager);
     }
 
 
@@ -57,5 +66,4 @@ public class MainActivity extends FragmentActivity {
         calendar.setTimeInMillis(time);
         tvLastUpdateDate.setText(sdf.format(calendar.getTime()));
     }
-
 }
