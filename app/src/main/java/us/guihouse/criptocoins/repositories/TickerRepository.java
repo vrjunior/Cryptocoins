@@ -92,7 +92,8 @@ public class TickerRepository {
                 .append("cryptocoins.favorite ")
                 .append("FROM tickers ")
                 .append("INNER JOIN cryptocoins ")
-                .append("ON tickers.id_cryptocoin = cryptocoins.id ");
+                .append("ON tickers.id_cryptocoin = cryptocoins.id ")
+                .append("ORDER BY rank ");
 
         Cursor cursor = database.rawQuery(sql.toString(), null);
 

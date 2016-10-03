@@ -49,6 +49,7 @@ public class MainFragment extends Fragment implements RepositoryManagerCallback,
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         rvCryptocoins = (RecyclerView) view.findViewById(R.id.rvCryptocoins);
         srlRvCryptocoins = (SwipeRefreshLayout) view.findViewById(R.id.srlRvCryptocoins);
@@ -68,6 +69,7 @@ public class MainFragment extends Fragment implements RepositoryManagerCallback,
         repositoryManager = new RepositoryManager(getContext(), this);
 
         srlRvCryptocoins.setRefreshing(true);
+
         srlRvCryptocoins.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -75,8 +77,7 @@ public class MainFragment extends Fragment implements RepositoryManagerCallback,
             }
         });
 
-        return inflater.inflate(R.layout.fragment_main, container, false);
-
+        return view;
     }
 
 
