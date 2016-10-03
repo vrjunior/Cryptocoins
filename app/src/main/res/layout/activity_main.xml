@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="us.guihouse.criptocoins.MainActivity">
 
+    <Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:title="@string/app_name"
+        android:background="@color/colorPrimary"
+        android:titleTextColor="@color/white">
+    </Toolbar>
+
     <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="5dp"
@@ -26,18 +36,21 @@
 
     </LinearLayout>
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/srlRvCryptocoins"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/llOptionsTop">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-        <android.support.v7.widget.RecyclerView
+        <fragment android:name="us.guihouse.criptocoins.MainFragment"
+            android:id="@+id/mainFragment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scrollbars="vertical"
-            android:id="@+id/rvCryptocoins">
-        </android.support.v7.widget.RecyclerView>
+            android:layout_height="match_parent" />
 
-    </android.support.v4.widget.SwipeRefreshLayout>
-</RelativeLayout>
+        <fragment android:name="us.guihouse.criptocoins.FavoriteFragment"
+            android:id="@+id/favoriteFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+</LinearLayout>
