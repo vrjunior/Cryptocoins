@@ -10,5 +10,6 @@ import us.guihouse.criptocoins.models.Ticker;
  */
 
 public interface SelectDataBaseCallback {
+    public void selectDataToShow(TickerRepository tickerRepository);
     public void onSelectResult(ArrayList<Ticker> result);
 }

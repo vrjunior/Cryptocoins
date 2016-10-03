@@ -26,20 +26,15 @@ import us.guihouse.criptocoins.repositories.AsyncTaskSelectDatabase;
 import us.guihouse.criptocoins.repositories.RepositoryManager;
 import us.guihouse.criptocoins.repositories.RepositoryManagerCallback;
 import us.guihouse.criptocoins.repositories.SelectDataBaseCallback;
+import us.guihouse.criptocoins.repositories.TickerRepository;
 
-public class FavoriteFragment extends Fragment implements RepositoryManagerCallback, AsyncTaskHttpResult, SelectDataBaseCallback, onRowClick {
+public class FavoriteFragment extends Fragment implements SelectDataBaseCallback, onRowClick {
 
-    private RepositoryManager repositoryManager;
-
-    private FetchTickerAsyncTask asyncTaskHttp;
-    private TextView tvLastUpdateDate;
     private RecyclerView rvFavoriteCryptocoins;
-    private SwipeRefreshLayout srlRvCryptocoins;
     private TickerAdapter adapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
     public FavoriteFragment() {
-        // Required empty public constructor
     }
 
     public static FavoriteFragment newInstance(int page, String title) {
@@ -58,30 +53,16 @@ public class FavoriteFragment extends Fragment implements RepositoryManagerCallb
 
         View view = inflater.inflate(R.layout.fragment_favorite, container, false);
         rvFavoriteCryptocoins = (RecyclerView) view.findViewById(R.id.rvFavoriteCryptocoins);
-        srlRvCryptocoins = (SwipeRefreshLayout) view.findViewById(R.id.srlRvCryptocoins);
-
 
         //Diz para a recyclerView que o tamanho do layout não irá mudar durante a execução.
         //Isso melhora a performance do app
         rvFavoriteCryptocoins.setHasFixedSize(true);
+        this.adapter = new TickerAdapter(getContext(), this);
+        this.rvFavoriteCryptocoins.setAdapter(adapter);
 
         //Define o layout manager, que irá consumir do adapter, conforme necessário
         mLayoutManager = new LinearLayoutManager(getContext());
         rvFavoriteCryptocoins.setLayoutManager(mLayoutManager);
-
-        this.adapter = new TickerAdapter(getContext(), this);
-        this.rvFavoriteCryptocoins.setAdapter(adapter);
-
-        repositoryManager = new RepositoryManager(getContext(), this);
-
-        srlRvCryptocoins.setRefreshing(true);
-
-        srlRvCryptocoins.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                doRequest();
-            }
-        });
 
         return view;
     }
@@ -103,32 +84,11 @@ public class FavoriteFragment extends Fragment implements RepositoryManagerCallb
 
     }
 
-    @Override
-    public void onManagerReady() {
-        this.doRequest();
-    }
 
-    private void doRequest() {
-        asyncTaskHttp = new FetchTickerAsyncTask(this, repositoryManager.getTickerRepository());
-        asyncTaskHttp.execute();
-    }
 
-    @Override
-    public void onFetchSuccess() {
-        this.selectDataToShow();
-        ((MainActivity)getActivity()).updateLastUpdateDate(System.currentTimeMillis());
-    }
-
-    @Override
-    public void onFetchConnectionError() {
-        Toast.makeText(getContext(), "Erro de conexão!", Toast.LENGTH_LONG).show();
-
-    }
-
-    @Override
-    public void onServerError() {
-        Toast.makeText(getContext(), "Não foi possível atualizar os dados!", Toast.LENGTH_LONG).show();
-        this.selectDataToShow();
+    public void selectDataToShow(TickerRepository tickerRepository) {
+        AsyncTaskSelectDatabase asyncTaskSelect = new AsyncTaskSelectDatabase(this, tickerRepository, true);
+        asyncTaskSelect.execute();
     }
 
     //CALLBACK DO SELECT DO SQLITE
@@ -136,27 +96,20 @@ public class FavoriteFragment extends Fragment implements RepositoryManagerCallb
         this.setOrUpdateRecyclerView(result);
     }
 
-    private void selectDataToShow() {
-        AsyncTaskSelectDatabase asyncTaskSelect = new AsyncTaskSelectDatabase(this, this.repositoryManager.getTickerRepository(), true);
-        asyncTaskSelect.execute();
-    }
-
     private void setOrUpdateRecyclerView(ArrayList<Ticker> tickersFeedList) {
         this.adapter.setTickers(tickersFeedList);
-        srlRvCryptocoins.setRefreshing(false);
         ((MainActivity)getActivity()).showLastUpdateDate(System.currentTimeMillis());
     }
 
-
     @Override
     public void favoriteCryptocoin(Integer id) {
-        AsyncTaskFavorite asyncTaskFavorite = new AsyncTaskFavorite(this.repositoryManager.getTickerRepository(), id, true);
+        AsyncTaskFavorite asyncTaskFavorite = new AsyncTaskFavorite(((MainActivity)getActivity()).repositoryManager.getTickerRepository(), id, true);
         this.adapter.setCheckedStar(id);
     }
 
     @Override
     public void unFavoriteCryptocoin(Integer id) {
-        this.repositoryManager.getTickerRepository().unFavoriteACryptocoin(id);
+        ((MainActivity)getActivity()).repositoryManager.getTickerRepository().unFavoriteACryptocoin(id);
         this.adapter.setUncheckedStar(id);
     }
 
