@@ -1,6 +1,7 @@
 package us.guihouse.criptocoins.repositories;
 
 import android.os.AsyncTask;
+import android.support.v4.widget.SwipeRefreshLayout;
 
 /**
  * Created by vrjunior on 02/10/16.

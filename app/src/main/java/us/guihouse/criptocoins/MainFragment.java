@@ -35,10 +35,10 @@ import us.guihouse.criptocoins.repositories.TickerRepository;
 
 public class MainFragment extends Fragment implements SelectDataBaseCallback, onRowClick {
 
-    private TextView tvLastUpdateDate;
     private RecyclerView rvCryptocoins;
     private TickerAdapter adapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private SwipeRefreshLayout srlRvCryptocoins;
 
     public MainFragment() {
     }
@@ -50,6 +50,7 @@ public class MainFragment extends Fragment implements SelectDataBaseCallback, on
         args.putString(Resources.getSystem().getString(R.string.fragmentMainTitle), title);
         mainFragment.setArguments(args);
         return mainFragment;
+
     }
 
     @Override
@@ -70,6 +71,10 @@ public class MainFragment extends Fragment implements SelectDataBaseCallback, on
         //Define o layout manager, que irá consumir do adapter, conforme necessário
         mLayoutManager = new LinearLayoutManager(getContext());
         rvCryptocoins.setLayoutManager(mLayoutManager);
+
+        srlRvCryptocoins = (SwipeRefreshLayout) view.findViewById(R.id.srlRvCryptocoins);
+        srlRvCryptocoins.setRefreshing(true);
+        srlRvCryptocoins.setOnRefreshListener(((MainActivity)getActivity()));
 
         return view;
     }
@@ -105,18 +110,20 @@ public class MainFragment extends Fragment implements SelectDataBaseCallback, on
     private void setOrUpdateRecyclerView(ArrayList<Ticker> tickersFeedList) {
         this.adapter.setTickers(tickersFeedList);
         ((MainActivity)getActivity()).showLastUpdateDate(System.currentTimeMillis());
+        srlRvCryptocoins.setRefreshing(false);
     }
-
 
     @Override
     public void favoriteCryptocoin(Integer id) {
         AsyncTaskFavorite asyncTaskFavorite = new AsyncTaskFavorite(((MainActivity)getActivity()).repositoryManager.getTickerRepository(), id, true);
+        asyncTaskFavorite.execute();
         this.adapter.setCheckedStar(id);
     }
 
     @Override
     public void unFavoriteCryptocoin(Integer id) {
-        ((MainActivity)getActivity()).repositoryManager.getTickerRepository().unFavoriteACryptocoin(id);
+        AsyncTaskFavorite asyncTaskFavorite = new AsyncTaskFavorite( ((MainActivity)getActivity()).repositoryManager.getTickerRepository(), id, false);
+        asyncTaskFavorite.execute();
         this.adapter.setUncheckedStar(id);
     }
 
@@ -126,5 +133,4 @@ public class MainFragment extends Fragment implements SelectDataBaseCallback, on
         openDetailsActivity.putExtra(MainActivity.EXTRA_ID_CRYPTOCOIN, id);
         this.startActivity(openDetailsActivity);
     }
-
 }

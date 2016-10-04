@@ -135,13 +135,14 @@ public class TickerAdapter extends RecyclerView.Adapter<TickerAdapter.CustomView
 
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            if(isChecked) {
-                this.clickCallback.favoriteCryptocoin(tickerItens.get(this.getAdapterPosition()).getCryptocoin().getId());
-                buttonView.setChecked(true);
-            }
-            else {
-                this.clickCallback.unFavoriteCryptocoin(tickerItens.get(this.getAdapterPosition()).getCryptocoin().getId());
-                buttonView.setChecked(false);
+            if(buttonView.isPressed()) { //Para não executar o código quando atualizar o scroll
+                if (isChecked) {
+                    this.clickCallback.favoriteCryptocoin(tickerItens.get(this.getAdapterPosition()).getCryptocoin().getId());
+                    buttonView.setChecked(true);
+                } else {
+                    this.clickCallback.unFavoriteCryptocoin(tickerItens.get(this.getAdapterPosition()).getCryptocoin().getId());
+                    buttonView.setChecked(false);
+                }
             }
         }
 

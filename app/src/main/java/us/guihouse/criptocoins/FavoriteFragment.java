@@ -30,6 +30,7 @@ import us.guihouse.criptocoins.repositories.TickerRepository;
 
 public class FavoriteFragment extends Fragment implements SelectDataBaseCallback, onRowClick {
 
+    private SwipeRefreshLayout srlFavoriteCryptocoins;
     private RecyclerView rvFavoriteCryptocoins;
     private TickerAdapter adapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -63,6 +64,10 @@ public class FavoriteFragment extends Fragment implements SelectDataBaseCallback
         //Define o layout manager, que irá consumir do adapter, conforme necessário
         mLayoutManager = new LinearLayoutManager(getContext());
         rvFavoriteCryptocoins.setLayoutManager(mLayoutManager);
+
+        srlFavoriteCryptocoins = (SwipeRefreshLayout) view.findViewById(R.id.srlFavoriteCryptocoins);
+        srlFavoriteCryptocoins.setRefreshing(true);
+        srlFavoriteCryptocoins.setOnRefreshListener((MainActivity)(getActivity()));
 
         return view;
     }
@@ -99,6 +104,7 @@ public class FavoriteFragment extends Fragment implements SelectDataBaseCallback
     private void setOrUpdateRecyclerView(ArrayList<Ticker> tickersFeedList) {
         this.adapter.setTickers(tickersFeedList);
         ((MainActivity)getActivity()).showLastUpdateDate(System.currentTimeMillis());
+        this.srlFavoriteCryptocoins.setRefreshing(false);
     }
 
     @Override
