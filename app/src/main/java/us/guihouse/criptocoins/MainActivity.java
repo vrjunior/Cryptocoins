@@ -76,10 +76,12 @@ public class MainActivity extends FragmentActivity implements RepositoryManagerC
     @Override
     public void onFetchSuccess() {
         android.app.Fragment frag = getFragmentManager().findFragmentById(R.layout.fragment_main);
-
         this.selectDataToFragments();
-
         this.updateLastUpdateDate(System.currentTimeMillis());
+    }
+
+    public void updateFavoriteList() {
+        this.selectDataToFragments();
     }
 
 

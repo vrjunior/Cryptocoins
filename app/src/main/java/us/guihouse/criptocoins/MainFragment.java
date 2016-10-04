@@ -118,6 +118,7 @@ public class MainFragment extends Fragment implements SelectDataBaseCallback, on
         AsyncTaskFavorite asyncTaskFavorite = new AsyncTaskFavorite(((MainActivity)getActivity()).repositoryManager.getTickerRepository(), id, true);
         asyncTaskFavorite.execute();
         this.adapter.setCheckedStar(id);
+        ((MainActivity)getActivity()).updateFavoriteList();
     }
 
     @Override
@@ -125,6 +126,7 @@ public class MainFragment extends Fragment implements SelectDataBaseCallback, on
         AsyncTaskFavorite asyncTaskFavorite = new AsyncTaskFavorite( ((MainActivity)getActivity()).repositoryManager.getTickerRepository(), id, false);
         asyncTaskFavorite.execute();
         this.adapter.setUncheckedStar(id);
+        ((MainActivity)getActivity()).updateFavoriteList();
     }
 
     @Override

@@ -111,12 +111,14 @@ public class FavoriteFragment extends Fragment implements SelectDataBaseCallback
     public void favoriteCryptocoin(Integer id) {
         AsyncTaskFavorite asyncTaskFavorite = new AsyncTaskFavorite(((MainActivity)getActivity()).repositoryManager.getTickerRepository(), id, true);
         this.adapter.setCheckedStar(id);
+        ((MainActivity)getActivity()).updateFavoriteList();
     }
 
     @Override
     public void unFavoriteCryptocoin(Integer id) {
         ((MainActivity)getActivity()).repositoryManager.getTickerRepository().unFavoriteACryptocoin(id);
         this.adapter.setUncheckedStar(id);
+        ((MainActivity)getActivity()).updateFavoriteList();
     }
 
     @Override
