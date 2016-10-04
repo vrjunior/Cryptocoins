@@ -10,6 +10,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -34,13 +36,12 @@ public class MainActivity extends FragmentActivity implements RepositoryManagerC
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        super.onCreate(savedInstanceState);
 
         this.repositoryManager = new RepositoryManager(this, this);
-        tvLastUpdateDate = (TextView) this.findViewById(R.id.tvLastUpdateDate);
         sharedPrefe = getSharedPreferences(SHARED_PREFERENCE_FILE, MODE_PRIVATE);
-
+        tvLastUpdateDate = (TextView) findViewById(R.id.tvLastUpdateDate);
 
         ViewPager vpPager = (ViewPager) findViewById(R.id.vpPager);
         adapterViewPager = new FragmentPagerAdapter(getSupportFragmentManager(), this);
