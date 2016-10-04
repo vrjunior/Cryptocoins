@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Cryptocoins</string>
+    <string name="lastUpdate">Última Atualização </string>
+    <string name="marketCapInfo">Valor de Mercado</string>
+    <string name="supplyInfo">Supply</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="fragmentFavoriteTitle">Favoritos</string>
+    <string name="fragmentMainTitle">Todos</string>
+    <string name="supplyAvailable">Disponível</string>
+    <string name="totalAvailable">Total</string>
+    <string name="chart7days">7 dias</string>
+    <string name="chart24hours">24 horas</string>
+    <string name="char1hour">1 hora</string>
+    <string name="graphicDescription">Oscilação de valor</string>
+</resources>
