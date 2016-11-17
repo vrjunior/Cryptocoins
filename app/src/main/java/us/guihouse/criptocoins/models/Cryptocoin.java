@@ -10,13 +10,6 @@ public class Cryptocoin {
     private String symbol;
     private boolean isFavorite;
 
-    public Cryptocoin(Integer id, String idString, String name, String symbol) {
-        this.id = id;
-        this.idString = idString;
-        this.name = name;
-        this.symbol = symbol;
-    }
-
     public Integer getId() {
         return this.id;
     }
@@ -35,6 +28,22 @@ public class Cryptocoin {
 
     public boolean getIsFavorite() {
         return this.isFavorite;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setIdString(String idString) {
+        this.idString = idString;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
     }
 
     public void setIsFavorite(boolean isFavorite) {

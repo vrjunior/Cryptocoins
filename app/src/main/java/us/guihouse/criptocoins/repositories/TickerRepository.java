@@ -106,13 +106,28 @@ public class TickerRepository {
                 Log.d("select", "comecou");
                 do {
                     currentFavorite = cursor.getInt(15) == 0 ? false : true;
-                    cc = new Cryptocoin(cursor.getInt(11),cursor.getString(12), cursor.getString(13), cursor.getString(14));
+
+                    cc = new Cryptocoin();
+                    cc.setId(cursor.getInt(11));
+                    cc.setIdString(cursor.getString(12));
+                    cc.setName(cursor.getString(13));
+                    cc.setSymbol(cursor.getString(14));
+
                     cc.setIsFavorite(currentFavorite);
 
-                    currentTicker = new Ticker(cc , cursor.getInt(0), cursor.getDouble(1), cursor.getDouble(2),
-                            cursor.getDouble(3), cursor.getDouble(4), cursor.getDouble(5),
-                            cursor.getDouble(6), cursor.getDouble(7), cursor.getDouble(8),
-                            cursor.getDouble(9), cursor.getLong(10));
+                    currentTicker = new Ticker();
+                    currentTicker.setCryptocoin(cc);
+                    currentTicker.setRankPosition(cursor.getInt(0));
+                    currentTicker.setPriceUsd(cursor.getDouble(1));
+                    currentTicker.setPriceBtc(cursor.getDouble(2));
+                    currentTicker.setVolumeUsdLast24h(cursor.getDouble(3));
+                    currentTicker.setMarketCapUsd(cursor.getDouble(4));
+                    currentTicker.setAvailableSupply(cursor.getDouble(5));
+                    currentTicker.setTotalSupply(cursor.getDouble(6));
+                    currentTicker.setPercentChange1h(cursor.getDouble(7));
+                    currentTicker.setPercentChange24h(cursor.getDouble(8));
+                    currentTicker.setPercentChange7d(cursor.getDouble(9));
+                    currentTicker.setLastUpdated(cursor.getLong(10));
 
                     result.add(currentTicker);
                 } while (cursor.moveToNext());
@@ -146,13 +161,26 @@ public class TickerRepository {
                 Log.d("select", "comecou");
                 do {
                     currentFavorite = cursor.getInt(15) == 0 ? false : true;
-                    cc = new Cryptocoin(cursor.getInt(11),cursor.getString(12), cursor.getString(13), cursor.getString(14));
+                    cc = new Cryptocoin();
+                    cc.setId(cursor.getInt(11));
+                    cc.setIdString(cursor.getString(12));
+                    cc.setName(cursor.getString(13));
+                    cc.setSymbol(cursor.getString(14));
                     cc.setIsFavorite(currentFavorite);
 
-                    currentTicker = new Ticker(cc , cursor.getInt(0), cursor.getDouble(1), cursor.getDouble(2),
-                            cursor.getDouble(3), cursor.getDouble(4), cursor.getDouble(5),
-                            cursor.getDouble(6), cursor.getDouble(7), cursor.getDouble(8),
-                            cursor.getDouble(9), cursor.getLong(10));
+                    currentTicker = new Ticker();
+                    currentTicker.setCryptocoin(cc);
+                    currentTicker.setRankPosition(cursor.getInt(0));
+                    currentTicker.setPriceUsd(cursor.getDouble(1));
+                    currentTicker.setPriceBtc(cursor.getDouble(2));
+                    currentTicker.setVolumeUsdLast24h(cursor.getDouble(3));
+                    currentTicker.setMarketCapUsd(cursor.getDouble(4));
+                    currentTicker.setAvailableSupply(cursor.getDouble(5));
+                    currentTicker.setTotalSupply(cursor.getDouble(6));
+                    currentTicker.setPercentChange1h(cursor.getDouble(7));
+                    currentTicker.setPercentChange24h(cursor.getDouble(8));
+                    currentTicker.setPercentChange7d(cursor.getDouble(9));
+                    currentTicker.setLastUpdated(cursor.getLong(10));
 
                     result.add(currentTicker);
                 } while (cursor.moveToNext());
@@ -181,13 +209,27 @@ public class TickerRepository {
         boolean currentFavorite;
         if(cursor != null && cursor.moveToFirst()) {
             currentFavorite = cursor.getInt(15) == 0 ? false : true;
-            cc = new Cryptocoin(cursor.getInt(11),cursor.getString(12), cursor.getString(13), cursor.getString(14));
+            cc = new Cryptocoin();
+            cc.setId(cursor.getInt(11));
+            cc.setIdString(cursor.getString(12));
+            cc.setName(cursor.getString(13));
+            cc.setSymbol(cursor.getString(14));
             cc.setIsFavorite(currentFavorite);
 
-            result = new Ticker(cc , cursor.getInt(0), cursor.getDouble(1), cursor.getDouble(2),
-                    cursor.getDouble(3), cursor.getDouble(4), cursor.getDouble(5),
-                    cursor.getDouble(6), cursor.getDouble(7), cursor.getDouble(8),
-                    cursor.getDouble(9), cursor.getLong(10));
+            result = new Ticker();
+
+            result.setCryptocoin(cc);
+            result.setRankPosition(cursor.getInt(0));
+            result.setPriceUsd(cursor.getDouble(1));
+            result.setPriceBtc(cursor.getDouble(2));
+            result.setVolumeUsdLast24h(cursor.getDouble(3));
+            result.setMarketCapUsd(cursor.getDouble(4));
+            result.setAvailableSupply(cursor.getDouble(5));
+            result.setTotalSupply(cursor.getDouble(6));
+            result.setPercentChange1h(cursor.getDouble(7));
+            result.setPercentChange24h(cursor.getDouble(8));
+            result.setPercentChange7d(cursor.getDouble(9));
+            result.setLastUpdated(cursor.getLong(10));
 
         }
         cursor.close();
